@@ -3,4 +3,10 @@ project(Project)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(main main.cpp)
+find_package(OpenGL 3.2 REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(GLFW3 REQUIRED)
+
+add_executable(main src/main.cpp)
+
+target_link_libraries(main OpenGL::GL glfw GLEW::glew)
