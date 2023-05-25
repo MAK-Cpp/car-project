@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-add_subdirectory(GUI)
 add_subdirectory(database)
-=======
-include_directories(include)
-add_library(shader include/shader.h src/shader.cpp)
-add_library(button include/button.h src/button.cpp)
+add_subdirectory(GUI)
+set(GUI_LIBRARIES ${GUI_LIBRARIES} PARENT_SCOPE)
 
-
->>>>>>> 730d16f (check commit)

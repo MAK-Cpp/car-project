@@ -1,5 +1,8 @@
-add_library(button include/button.h src/button.cpp)
+include_directories(include)
+qt6_wrap_cpp(loginWindow.moc include/loginWindow.h)
+add_library(loginWindow ${loginWindow.moc} src/loginWindow.cpp)
+qt6_wrap_cpp(userWindow.moc include/userWindow.h)
+add_library(userWindow ${userWindow.moc} src/userWindow.cpp)
 
 
-
-target_include_directories(button PRIVATE include)
+set(GUI_LIBRARIES loginWindow userWindow PARENT_SCOPE)

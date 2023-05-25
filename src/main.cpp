@@ -1,65 +1,58 @@
 #include <iostream>
 #include <filesystem>
-// glew need to include before glfw!
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+#include <string>
 
 // for SQL
 #include "sqlite3.h"
 
-#include "include/button.h"
+#include <QApplication>
+#include <QFont>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMainWindow>
 
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
-    // Когда пользователь нажимает ESC, мы устанавливаем свойство WindowShouldClose в true,
-    // и приложение после этого закроется
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-}
+#include "loginWindow.h"
+#include "userWindow.h"
 
-int main(int argc, char** argv) {
-    // Инициализация GLFW
-    glfwInit();
-    // Настройка GLFW
-    // Задается минимальная требуемая версия OpenGL.
-    // Мажорная
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    // Минорная
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    // Установка профайла для которого создается контекст
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // Выключение возможности изменения размера окна
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    // for MacOS
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "car project", nullptr, nullptr);
-    if (window == nullptr) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QMainWindow main_window;
+    main_window.setFixedSize(800, 600);
 
-    glewExperimental = GL_TRUE;  // need to use new functional + core-profile mode
-    if (glewInit() != GLEW_OK) {
-        std::cout << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
 
-    // set GL_COLOR_BUFFER_BIT
-    glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
+    loginWindow window(&main_window);
 
-    glfwSetKeyCallback(window, key_callback);
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+    userWindow second_window(800, 600, &main_window);
 
-        // update GL_COLOR_BUFFER_BIT
-        // need before all drawings
-        glClear(GL_COLOR_BUFFER_BIT);
-        glfwSwapBuffers(window);
-    }
+    QObject::connect(&window, SIGNAL(changeWindow()), &second_window, SLOT(show()));
 
-    glfwTerminate();
-    return 0;
+
+    // загружаем изображение в QPixmap
+    QPixmap pixmap(PROJECT_SOURCE_DIR "/imgs/image.png");
+
+
+
+
+//    quit.setIcon(QIcon(pixmap));
+//    quit.setIconSize(QSize(400, 600));
+//    quit.setStyleSheet("background-image: url(" PROJECT_SOURCE_DIR "/imgs/image.png" ");");
+
+    QPushButton breturn("Return", &second_window);
+    breturn.resize(100, 200);
+    breturn.setFont(QFont("Times", 18, QFont::Bold));
+    breturn.setGeometry(100, 200, 100, 200);
+    QObject::connect(&breturn, SIGNAL(clicked()), &second_window, SLOT(hide()));
+    QObject::connect(&breturn, SIGNAL(clicked()), &window, SLOT(update()));
+    QObject::connect(&breturn, SIGNAL(clicked()), &window, SLOT(show()));
+
+    main_window.show();
+    second_window.hide();
+
+    return app.exec();
 }
