@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(Qt6 COMPONENTS Core Widgets Gui REQUIRED)
 find_package(SQLite3 REQUIRED)
+find_package(Qt6 COMPONENTS Widgets REQUIRED)
 
 add_definitions( -DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
