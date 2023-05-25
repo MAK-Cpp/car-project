@@ -26,7 +26,7 @@ std::vector<Car> select_cars(std::string start_date, std::string end_date, std::
 
 enum class access : uint8_t {NONE, USER, ROOT};
 
-access check_password(QString login, QString password);
+access check_user(QString login, QString password);
 
 bool insert_car(Car const &new_car);
 

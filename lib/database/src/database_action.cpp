@@ -13,7 +13,7 @@ std::vector<Car> select_cars(std::string query){
     std::filesystem::path const database_path(PROJECT_SOURCE_DIR  "/database/car_project.db");
 }
 
-access check_password(QString login_s, QString password_s){
+access check_user(QString login_s, QString password_s){
     sqlite3 *db;
     int flag;
     std::filesystem::path const database_path(PROJECT_SOURCE_DIR  "/database/car_project.db");
