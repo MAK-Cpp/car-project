@@ -4,5 +4,8 @@ add_library(loginWindow ${loginWindow.moc} src/loginWindow.cpp)
 qt6_wrap_cpp(userWindow.moc include/userWindow.h)
 add_library(userWindow ${userWindow.moc} src/userWindow.cpp)
 
+#get_target_property(LIBA_INCLUDES loginWindow LINK_LIBRARIES)
+
+#message("${LIBA_INCLUDES}")
 
 set(GUI_LIBRARIES loginWindow userWindow PARENT_SCOPE)

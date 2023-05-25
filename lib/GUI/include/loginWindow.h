@@ -9,8 +9,12 @@
 #include <QString>
 #include <QByteArray>
 #include <QVBoxLayout>
+#include <QFormLayout>
+#include <QLabel>
+#include <QPalette>
 
 #include <string>
+
 
 
 class loginWindow : public QWidget {
@@ -24,10 +28,16 @@ public slots:
 signals:
     void changeWindow();
 private:
-    QVBoxLayout layout_;
+    QVBoxLayout box_layout_;
+    QFormLayout form_layout_;
     QLineEdit login_input_;
     QLineEdit password_input_;
+    QLabel login_;
+    QLabel password_;
+    QLabel error_;
+    QLabel name_;
     QPushButton login_button_;
+    QPushButton register_button_;
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_LOGINWINDOW_H_

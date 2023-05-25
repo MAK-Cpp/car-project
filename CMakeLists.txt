@@ -9,7 +9,7 @@ find_package(Qt6 COMPONENTS Widgets REQUIRED)
 
 add_definitions( -DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
-set(LIBRARIES Qt::Core Qt::Widgets Qt::Gui SQLite3)
+set(LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui SQLite3)
 
 
 link_libraries(${LIBRARIES})
