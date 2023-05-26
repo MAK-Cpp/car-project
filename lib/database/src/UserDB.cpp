@@ -10,7 +10,7 @@ std::string toStdString(const QString& x) {
     return std::string{x.toUtf8().data()};
 }
 
-void UserDB::init() {
+void GeneralDB::init() {
     int flag;
     char *zErrMsg = 0;
     std::filesystem::path const database_path(PROJECT_SOURCE_DIR  "/database/car_project.db");
@@ -20,12 +20,12 @@ void UserDB::init() {
     }
 }
 
-UserDB::~UserDB() {
+GeneralDB::~GeneralDB() {
     sqlite3_close(data_base_);
     delete data_base_;
 }
 
-access UserDB::check_user(QString login_s, QString password_s){
+access GeneralDB::check_user(QString login_s, QString password_s){
     sqlite3_stmt *stmt;
     std::string query = "SELECT login, password, root FROM users";
     sqlite3_prepare_v2(data_base_, query.c_str(), -1, &stmt, nullptr);
@@ -44,7 +44,7 @@ access UserDB::check_user(QString login_s, QString password_s){
 }
 
 
-reg_const UserDB::register_user(QString name_s, QString login_s, QString password_s){
+reg_const GeneralDB::register_user(QString name_s, QString login_s, QString password_s){
     char* zErrMsg;
     sqlite3_stmt *stmt;
     int rc;

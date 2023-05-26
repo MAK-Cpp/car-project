@@ -22,14 +22,14 @@ public:
 };
 
 
-class UserDB {
+class GeneralDB {
 private:
     inline static sqlite3 *data_base_ = nullptr;
-    UserDB() = default;
+    GeneralDB() = default;
 public:
     static void init();
 
-    ~UserDB();
+    ~GeneralDB();
 
     static reg_const register_user(QString name_s, QString login_s, QString password_s);
 
