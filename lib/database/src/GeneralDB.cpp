@@ -9,9 +9,6 @@ Car::Car(QString id, QString name, QString price, QString consumption, QString c
                                                            picture_path{picture_path}, town{town}{
 }
 
-std::string toStdString(const QString& x) {
-    return std::string{x.toUtf8().data()};
-}
 
 void GeneralDB::init() {
     int flag;
