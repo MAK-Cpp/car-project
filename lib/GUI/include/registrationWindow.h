@@ -26,18 +26,23 @@ public slots:
 signals:
     void changeToLoginWindow();
 private:
+    QWidget registration_widget_;
+    QWidget success_widget_;
     QVBoxLayout vertical_box_layout_;
+    QVBoxLayout vertical_success_box_layout_;
     QFormLayout form_layout_;
     QLineEdit user_name_input_;
     QLineEdit login_input_;
     QLineEdit password_input_;
     QLineEdit again_password_input_;
-    QLabel user_name_;
-    QLabel login_;
-    QLabel password_;
-    QLabel again_password_;
-    QLabel error_;
-    QLabel name_;
+    QLabel success_label_;
+    QLabel user_name_label_;
+    QLabel login_label_;
+    QLabel password_label_;
+    QLabel again_password_label_;
+    QLabel error_label_;
+    QLabel name_label_;
+    QPushButton success_button_;
     QPushButton login_button_;
     QPushButton register_button_;
 };

@@ -5,7 +5,7 @@
 #include "QString"
 
 enum class access : uint8_t {NONE, USER, ROOT};
-enum class reg_const : uint8_t {NONE, COMPLETE};
+enum class reg_const : bool {NONE, COMPLETE};
 
 class Car {
 private:
