@@ -1,4 +1,10 @@
 #include "UserDB.h"
+#include <string>
+
+std::string toStdString(const QString& x) {
+    return std::string{x.toUtf8().data()};
+}
+
 
 Car::Car(QString name, QString id, QString price, QString consumption, QString capacity,
          QString fuel, QString picture_path, QString town):name{std::move(name)}, id{id},
@@ -53,8 +59,8 @@ reg_const UserDB::register_user(QString name_s, QString login_s, QString passwor
             return reg_const::NONE;
         }
     }
-    query = "INSERT INTO users (name, login, password, root) VALUES ('" + name_s.toStdString() + "', '" + login_s.toStdString() +
-            "', '" + password_s.toStdString() + "', 1)";
+    query = "INSERT INTO users (name, login, password, root) VALUES ('" + toStdString(name_s) + "', '" + toStdString(login_s) +
+            "', '" + toStdString(password_s) + "', 1)";
     rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
     if(rc != SQLITE_OK){
         throw std::runtime_error(zErrMsg);
