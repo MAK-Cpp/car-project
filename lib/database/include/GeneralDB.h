@@ -1,5 +1,5 @@
-#ifndef CAR_PROJECT_USERDB_H
-#define CAR_PROJECT_USERDB_H
+#ifndef CAR_PROJECT_GENERALDB_H
+#define CAR_PROJECT_GENERALDB_H
 #include <filesystem>
 #include "sqlite3.h"
 #include "QString"
@@ -40,4 +40,4 @@ public:
     static bool delete_car(int id);
 };
 
-#endif //CAR_PROJECT_USERDB_H
+#endif //CAR_PROJECT_GENERALDB_H
