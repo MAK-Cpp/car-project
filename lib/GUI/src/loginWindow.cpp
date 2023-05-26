@@ -1,10 +1,10 @@
 #include "loginWindow.h"
-#include "database_action.h"
+#include "UserDB.h"
 
 #include <iostream>
 
 void loginWindow::showUserWindow() {
-    switch (check_user(login_input_.text(), password_input_.text())) {
+    switch (UserDB::check_user(login_input_.text(), password_input_.text())) {
         case access::NONE: {
             error_.setText("Ошибка: неправильный логин или пароль!");
             break;
@@ -34,7 +34,10 @@ loginWindow::loginWindow(QWidget *parent, int w, int h)
 
     this->setFixedSize(w, h);
 
-    name_.setFont(QFont("brush script mt", 80));
+    int font_id = QFontDatabase::addApplicationFont(PROJECT_SOURCE_DIR "/fonts/brushscriptmtrusbyme_italic.otf");
+    QString font_family = QFontDatabase::applicationFontFamilies(font_id).at(0);
+
+    name_.setFont(QFont(font_family, 80));
 
     QPalette error_text_color;
     error_text_color.setColor(QPalette::WindowText, Qt::red);

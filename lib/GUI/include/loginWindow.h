@@ -12,6 +12,7 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QPalette>
+#include <QFontDatabase>
 
 #include <string>
 
