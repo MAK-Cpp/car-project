@@ -1,14 +1,26 @@
 #ifndef CARPROJECT_LIB_GUI_INCLUDE_LOGINWINDOW_H_
 #define CARPROJECT_LIB_GUI_INCLUDE_LOGINWINDOW_H_
 
-#include "QT-config.h"
+#include <QWidget>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QObject>
+#include <QMouseEvent>
+#include <QString>
+#include <QByteArray>
+#include <QVBoxLayout>
+#include <QFormLayout>
+#include <QLabel>
+#include <QPalette>
+#include <QFontDatabase>
+
 #include <string>
 
 
-class LoginWindow : public QWidget {
+class loginWindow : public QWidget {
     Q_OBJECT
 public:
-    explicit LoginWindow(QMainWindow* parent);
+    explicit loginWindow(QWidget* parent);
     void mousePressEvent ( QMouseEvent * event ) override;
 public slots:
     void showUserWindow();
@@ -21,10 +33,10 @@ private:
     QFormLayout form_layout_;
     QLineEdit login_input_;
     QLineEdit password_input_;
-    QLabel login_label_;
-    QLabel password_label_;
-    QLabel error_label_;
-    QLabel name_label_;
+    QLabel login_;
+    QLabel password_;
+    QLabel error_;
+    QLabel name_;
     QPushButton login_button_;
     QPushButton register_button_;
 };

@@ -1,48 +1,54 @@
-#include "LoginWindow.h"
+#include "loginWindow.h"
 #include "GeneralDB.h"
 
 #include <iostream>
 
-void LoginWindow::mousePressEvent(QMouseEvent *event) {
+void loginWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         this->setFocus();
     }
 }
 
-LoginWindow::LoginWindow(QMainWindow *parent)
+loginWindow::loginWindow(QWidget *parent)
     : QWidget(parent), vertical_box_layout_(this), login_button_("Войти"), register_button_("Первый раз? Регистрация"),
-      login_label_("Имя пользователя:"), password_label_("Пароль:"), name_label_(parent->windowTitle()) {
+      login_("Имя пользователя:"), password_("Пароль:"), name_(parent->windowTitle()) {
 
     this->setFixedSize(parent->width(), parent->height());
 
-    name_label_.setFont(QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-        PROJECT_SOURCE_DIR "/fonts/brushscriptmtrusbyme_italic.otf")).at(0), 80));
+    int font_id = QFontDatabase::addApplicationFont(PROJECT_SOURCE_DIR "/fonts/brushscriptmtrusbyme_italic.otf");
+    QString font_family = QFontDatabase::applicationFontFamilies(font_id).at(0);
+    name_.setFont(QFont(font_family, 80));
 
     QPalette error_text_color;
     error_text_color.setColor(QPalette::WindowText, Qt::red);
-    error_label_.setPalette(error_text_color);
+    error_.setPalette(error_text_color);
+
+//    login_input_.setFixedWidth(this->width() / 5);
+//    password_input_.setFixedWidth(this->width() / 5);
 
 
-    form_layout_.addRow(&login_label_, &login_input_);
-    form_layout_.addRow(&password_label_, &password_input_);
+    form_layout_.addRow(&login_, &login_input_);
+    form_layout_.addRow(&password_, &password_input_);
     form_layout_.setFormAlignment(Qt::AlignCenter | Qt::AlignTop);
 
-    vertical_box_layout_.addWidget(&name_label_);
+    vertical_box_layout_.addWidget(&name_);
     vertical_box_layout_.addStretch(1);
-    vertical_box_layout_.addWidget(&error_label_);
+    vertical_box_layout_.addWidget(&error_);
     vertical_box_layout_.addLayout(&form_layout_);
     vertical_box_layout_.addWidget(&login_button_);
     vertical_box_layout_.addWidget(&register_button_);
     vertical_box_layout_.addStretch(2);
 
-    vertical_box_layout_.setAlignment(&name_label_, Qt::AlignCenter | Qt::AlignTop);
+    vertical_box_layout_.setAlignment(&name_, Qt::AlignCenter | Qt::AlignTop);
     vertical_box_layout_.setAlignment(&form_layout_, Qt::AlignCenter);
-    vertical_box_layout_.setAlignment(&error_label_, Qt::AlignCenter);
+    vertical_box_layout_.setAlignment(&error_, Qt::AlignCenter);
     vertical_box_layout_.setAlignment(&login_button_, Qt::AlignCenter | Qt::AlignTop);
     vertical_box_layout_.setAlignment(&register_button_, Qt::AlignCenter | Qt::AlignTop);
 
     login_button_.setFixedWidth(this->width() / 3);
+//    login_button_.setFixedHeight(this->width() / 20);
     register_button_.setFixedWidth(this->width() / 3);
+//    register_button_.setFixedHeight(this->width() / 20);
 
 
     password_input_.setEchoMode(QLineEdit::Password);
@@ -56,26 +62,26 @@ LoginWindow::LoginWindow(QMainWindow *parent)
 
 
 
-void LoginWindow::showUserWindow() {
+void loginWindow::showUserWindow() {
     if(login_input_.text().isEmpty() || password_input_.text().isEmpty()) {
-        error_label_.setText("Ошибка: логин или пароль не могут быть пустыми!");
+        error_.setText("Ошибка: логин или пароль не могут быть пустыми!");
         password_input_.clear();
         return;
     }
     switch (GeneralDB::check_user(login_input_.text(), password_input_.text())) {
         case access::NONE: {
-            error_label_.setText("Ошибка: неправильный логин или пароль!");
+            error_.setText("Ошибка: неправильный логин или пароль!");
             break;
         }
         case access::USER: {
-            error_label_.clear();
-            this->hide();
-            login_input_.clear();
-            emit changeToUserWindow();
+            error_.clear();
             break;
         }
         case access::ROOT: {
-            error_label_.setText("Извините, рут пока заходить не может.");
+            error_.clear();
+            this->hide();
+            login_input_.clear();
+            emit changeToUserWindow();
             break;
         }
         default: {
@@ -86,10 +92,10 @@ void LoginWindow::showUserWindow() {
 
 }
 
-void LoginWindow::showRegistrationWindow() {
+void loginWindow::showRegistrationWindow() {
     login_input_.clear();
     password_input_.clear();
-    error_label_.clear();
+    error_.clear();
     this->hide();
     emit changeToRegistrationWindow();
 }
