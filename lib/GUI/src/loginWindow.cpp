@@ -29,7 +29,7 @@ void loginWindow::showUserWindow() {
 }
 
 loginWindow::loginWindow(QWidget *parent, int w, int h)
-    : QWidget(parent), box_layout_(this), login_button_("Войти"), register_button_("Первый раз? Регистрация"),
+    : QWidget(parent), vertical_box_layout_(this), login_button_("Войти"), register_button_("Первый раз? Регистрация"),
       login_("Имя пользователя:"), password_("Пароль:"), name_("КОЛЁСА НА ВРЕМЯ") {
 
     this->setFixedSize(w, h);
@@ -44,19 +44,19 @@ loginWindow::loginWindow(QWidget *parent, int w, int h)
     form_layout_.addRow(&login_, &login_input_);
     form_layout_.addRow(&password_, &password_input_);
 
-    box_layout_.addWidget(&name_);
-    box_layout_.addStretch(1);
-    box_layout_.addWidget(&error_);
-    box_layout_.addLayout(&form_layout_);
-    box_layout_.addWidget(&login_button_);
-    box_layout_.addWidget(&register_button_);
-    box_layout_.addStretch(2);
+    vertical_box_layout_.addWidget(&name_);
+    vertical_box_layout_.addStretch(1);
+    vertical_box_layout_.addWidget(&error_);
+    vertical_box_layout_.addLayout(&form_layout_);
+    vertical_box_layout_.addWidget(&login_button_);
+    vertical_box_layout_.addWidget(&register_button_);
+    vertical_box_layout_.addStretch(2);
 
-    box_layout_.setAlignment(&name_, Qt::AlignCenter | Qt::AlignTop);
-    box_layout_.setAlignment(&form_layout_, Qt::AlignLeft);
-    box_layout_.setAlignment(&error_, Qt::AlignCenter);
-    box_layout_.setAlignment(&login_button_, Qt::AlignCenter | Qt::AlignTop);
-    box_layout_.setAlignment(&register_button_, Qt::AlignCenter | Qt::AlignTop);
+    vertical_box_layout_.setAlignment(&name_, Qt::AlignCenter | Qt::AlignTop);
+    vertical_box_layout_.setAlignment(&form_layout_, Qt::AlignLeft);
+    vertical_box_layout_.setAlignment(&error_, Qt::AlignCenter);
+    vertical_box_layout_.setAlignment(&login_button_, Qt::AlignCenter | Qt::AlignTop);
+    vertical_box_layout_.setAlignment(&register_button_, Qt::AlignCenter | Qt::AlignTop);
 
     login_button_.setFixedWidth(this->width() / 3);
     register_button_.setFixedWidth(this->width() / 3);

@@ -16,7 +16,6 @@
 #include <string>
 
 
-
 class loginWindow : public QWidget {
     Q_OBJECT
 public:
@@ -28,7 +27,7 @@ signals:
     void changeToUserWindow();
     void changeToRegistrationWindow();
 private:
-    QVBoxLayout box_layout_;
+    QVBoxLayout vertical_box_layout_;
     QFormLayout form_layout_;
     QLineEdit login_input_;
     QLineEdit password_input_;
