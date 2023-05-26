@@ -1,7 +1,6 @@
 add_subdirectory(database)
 
 include_directories(database/include)
-link_libraries(database_action)
 
 add_subdirectory(GUI)
 

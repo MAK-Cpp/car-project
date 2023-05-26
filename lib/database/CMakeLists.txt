@@ -1,4 +1,3 @@
 include_directories(include)
-add_library(database_action include/database_action.h src/database_action.cpp)
-
-set(${DATABASE_LIBRARIES} database_action PARENT_SCOPE)
+add_library(UserDB include/UserDB.h src/UserDB.cpp)
+set(DATABASE_LIBRARIES UserDB PARENT_SCOPE)
