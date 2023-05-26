@@ -1,10 +1,10 @@
 #include "loginWindow.h"
-#include "UserDB.h"
+#include "GeneralDB.h"
 
 #include <iostream>
 
 void loginWindow::showUserWindow() {
-    switch (UserDB::check_user(login_input_.text(), password_input_.text())) {
+    switch (GeneralDB::check_user(login_input_.text(), password_input_.text())) {
         case access::NONE: {
             error_.setText("Ошибка: неправильный логин или пароль!");
             break;

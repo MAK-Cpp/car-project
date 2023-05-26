@@ -16,10 +16,10 @@
 
 #include "loginWindow.h"
 #include "userWindow.h"
-#include "UserDB.h"
+#include "GeneralDB.h"
 
 int main(int argc, char *argv[]) {
-    UserDB::init();
+    GeneralDB::init();
     QApplication app(argc, argv);
     QMainWindow main_window;
     main_window.setFixedSize(800, 600);
