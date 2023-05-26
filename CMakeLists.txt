@@ -23,5 +23,5 @@ set_target_properties(main PROPERTIES AUTOMOC TRUE)
 
 
 
-target_link_libraries(main PRIVATE ${GUI_LIBRARIES})
-target_include_directories(main PRIVATE lib/GUI/include)
+target_link_libraries(main PRIVATE ${GUI_LIBRARIES} ${DATABASE_LIBRARIES})
+target_include_directories(main PRIVATE lib/GUI/include lib/database/include)
