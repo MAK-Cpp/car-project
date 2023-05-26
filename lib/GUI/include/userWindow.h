@@ -7,7 +7,7 @@
 class userWindow : public QWidget{
 Q_OBJECT
 public:
-    explicit userWindow(int w = 800, int h = 600, QWidget* parent = nullptr);
+    explicit userWindow(QWidget* parent);
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_USERWINDOW_H_
