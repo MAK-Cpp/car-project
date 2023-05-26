@@ -23,25 +23,13 @@ int main(int argc, char *argv[]) {
     QMainWindow main_window;
     main_window.setFixedSize(800, 600);
 
-    loginWindow window(&main_window);
+    loginWindow window(&main_window, main_window.width(), main_window.height());
 
-    userWindow second_window(800, 600, &main_window);
+    userWindow second_window(main_window.width(), main_window.height(), &main_window);
 
-    QObject::connect(&window, SIGNAL(changeWindow()), &second_window, SLOT(show()));
-
-
-    // загружаем изображение в QPixmap
-    QPixmap pixmap(PROJECT_SOURCE_DIR "/imgs/image.png");
-
-
-
-
-//    quit.setIcon(QIcon(pixmap));
-//    quit.setIconSize(QSize(400, 600));
-//    quit.setStyleSheet("background-image: url(" PROJECT_SOURCE_DIR "/imgs/image.png" ");");
+    QObject::connect(&window, SIGNAL(changeToUserWindow()), &second_window, SLOT(show()));
 
     QPushButton breturn("Return", &second_window);
-    breturn.resize(100, 200);
     breturn.setFont(QFont("Comic sans", 18, QFont::Bold));
     breturn.setGeometry(100, 200, 100, 200);
     QObject::connect(&breturn, SIGNAL(clicked()), &second_window, SLOT(hide()));

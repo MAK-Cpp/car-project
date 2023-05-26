@@ -19,14 +19,14 @@
 
 class loginWindow : public QWidget {
     Q_OBJECT
-
 public:
     explicit loginWindow(QWidget* parent = nullptr, int w = 800, int h = 600);
     void mousePressEvent ( QMouseEvent * event ) override;
 public slots:
     void showUserWindow();
 signals:
-    void changeWindow();
+    void changeToUserWindow();
+    void changeToRegistrationWindow();
 private:
     QVBoxLayout box_layout_;
     QFormLayout form_layout_;
