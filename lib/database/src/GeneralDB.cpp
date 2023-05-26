@@ -1,10 +1,5 @@
-#include "UserDB.h"
+#include "GeneralDB.h"
 #include <string>
-
-std::string toStdString(const QString& x) {
-    return std::string{x.toUtf8().data()};
-}
-
 
 Car::Car(QString name, QString id, QString price, QString consumption, QString capacity,
          QString fuel, QString picture_path, QString town):name{std::move(name)}, id{id},
