@@ -41,9 +41,10 @@ int main(int argc, char *argv[]) {
     QObject::connect(&breturn, SIGNAL(clicked()), &second_window, SLOT(hide()));
     QObject::connect(&breturn, SIGNAL(clicked()), &login_window, SLOT(show()));
 
-    main_window.show();
     second_window.hide();
     registration_window.hide();
+    main_window.show();
+
 
     return app.exec();
 }
