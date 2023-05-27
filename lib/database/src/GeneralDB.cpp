@@ -3,18 +3,32 @@
 #include <algorithm>
 #include <iostream>
 
-Car::Car(QString id, QString name, QString price, QString consumption, QString capacity,
-         QString fuel, QString picture_path, QString town, QString color, QString brand):id{std::move(id)}, name{name},
-                                                           price{price}, consumption{consumption}, capacity{capacity},
-                                                           fuel{fuel}, picture_path{picture_path}, town{town},
-                                                           color{color}, brand{brand}{
-
-}
+/**
+ * Преобразует @b QString в @b std::string
+ *
+ * @param x @b QString переменная
+ * @return @b std::string, содержащая текст из @b QString
+ */
 std::string toStdString(const QString &x) {
     return std::string{x.toUtf8().data()};
 }
 
+Car::Car(QString name, QString id, QString price, QString consumption, QString capacity,
+         QString fuel, QString picture_path, QString town) : name{std::move(name)},
+                                                             id{id},
+                                                             price{price},
+                                                             consumption{consumption},
+                                                             capacity{capacity},
+                                                             fuel{fuel},
+                                                             picture_path{picture_path},
+                                                             town{town} {
+}
 
+/**
+ * Подключается к БД, вызывается один раз при запуске программы.
+ *
+ * @throw std::filesystem::filesystem_error если при открытии БД произошла ошибка.
+ */
 void GeneralDB::init() {
     int flag;
     char *zErrMsg = 0;
@@ -56,6 +70,16 @@ bool isDateEarlier(std::string date1, std::string date2) {
 
     return true;
 }
+
+/**
+ * Пытается залогинить пользователя.
+ *
+ * @param login_s логин пользователя
+ * @param password_s пароль пользователя
+ * @return access::NONE, если пользователь не зарегистрирован
+ * @return access::USER, если вошел обычный пользователь
+ * @return access::ROOT, если зашел администратор
+ */
 access GeneralDB::check_user(QString login_s, QString password_s) {
     sqlite3_stmt *stmt;
     std::string query = "SELECT login, password, root FROM users";
@@ -74,6 +98,16 @@ access GeneralDB::check_user(QString login_s, QString password_s) {
     return access::NONE;
 }
 
+/**
+ * Регистрирует нового пользователя.
+ *
+ * @param name_s имя пользователя
+ * @param login_s логин пользователя
+ * @param password_s пароль пользователя
+ * @throw std::runtime_error если не получилось зарегистрировать пользователя.
+ * @returns @b reg_const::NONE, если пользователь уже есть в БД
+ * @returns @b reg_const::COMPLETE, иначе
+ */
 reg_const GeneralDB::register_user(QString name_s, QString login_s, QString password_s) {
     char *zErrMsg;
     sqlite3_stmt *stmt;
@@ -97,6 +131,14 @@ reg_const GeneralDB::register_user(QString name_s, QString login_s, QString pass
     return reg_const::COMPLETE;
 }
 
+/**
+ * Возвращает @b std::vector\<@b Car\>, содержащий все машины, доступные в выбранное время.
+ *
+ * @param line_s строка, содержащая запрос пользователя по типу машины
+ * @param start_date_s строка, содержащая стартовую дату
+ * @param end_date_s строка, содержащая конечную дату
+ * @return @b std::vector\<@b Car\> машин, подходящих под параметры запроса
+ */
 std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QString end_date_s) {
     std::vector<Car> result;
     std::vector<int> cars_id;
@@ -138,8 +180,6 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
         double fuel = sqlite3_column_double(stmt, 5);
         std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
         std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));
-        std::string color = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 8));
-        std::string brand = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 9));
         auto it = std::find(cars_id.begin(), cars_id.end(), car_id);
         if (it != cars_id.end()) {
             result.emplace_back(Car(QString::fromStdString(std::to_string(car_id)),
@@ -149,9 +189,7 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
                                     QString::fromStdString(std::to_string(capacity)),
                                     QString::fromStdString(std::to_string(fuel)),
                                     QString::fromStdString(picture_path),
-                                    QString::fromStdString(town),
-                                    QString::fromStdString(color),
-                                    QString::fromStdString(brand)));
+                                    QString::fromStdString(town)));
         }
     }
     return result;

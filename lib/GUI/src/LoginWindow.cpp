@@ -1,15 +1,15 @@
-#include "loginWindow.h"
+#include "LoginWindow.h"
 #include "GeneralDB.h"
 
 #include <iostream>
 
-void loginWindow::mousePressEvent(QMouseEvent *event) {
+void LoginWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         this->setFocus();
     }
 }
 
-loginWindow::loginWindow(QWidget *parent)
+LoginWindow::LoginWindow(QMainWindow *parent)
     : QWidget(parent), vertical_box_layout_(this), login_button_("Войти"), register_button_("Первый раз? Регистрация"),
       login_label_("Имя пользователя:"), password_label_("Пароль:"), name_label_(parent->windowTitle()) {
 
@@ -56,7 +56,7 @@ loginWindow::loginWindow(QWidget *parent)
 
 
 
-void loginWindow::showUserWindow() {
+void LoginWindow::showUserWindow() {
     if(login_input_.text().isEmpty() || password_input_.text().isEmpty()) {
         error_label_.setText("Ошибка: логин или пароль не могут быть пустыми!");
         password_input_.clear();
@@ -69,13 +69,13 @@ void loginWindow::showUserWindow() {
         }
         case access::USER: {
             error_label_.clear();
-            break;
-        }
-        case access::ROOT: {
-            error_label_.clear();
             this->hide();
             login_input_.clear();
             emit changeToUserWindow();
+            break;
+        }
+        case access::ROOT: {
+            error_label_.setText("Извините, рут пока заходить не может.");
             break;
         }
         default: {
@@ -86,7 +86,7 @@ void loginWindow::showUserWindow() {
 
 }
 
-void loginWindow::showRegistrationWindow() {
+void LoginWindow::showRegistrationWindow() {
     login_input_.clear();
     password_input_.clear();
     error_label_.clear();

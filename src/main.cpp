@@ -1,45 +1,40 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <cmath>
 
 // for SQL
 #include "sqlite3.h"
 
-#include <QApplication>
-#include <QFont>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMainWindow>
-
+#include "QT-config.h"
 #include "LoginWindow.h"
 #include "UserWindow.h"
 #include "RegistrationWindow.h"
 #include "GeneralDB.h"
+#include "CarCardWindow.h"
 
 int main(int argc, char *argv[]) {
     GeneralDB::init();
     QApplication app(argc, argv);
     QMainWindow main_window;
     main_window.setWindowTitle("КОЛЁСА НА ВРЕМЯ");
+//    main_window.setFixedSize(1680, 1050);
+//    main_window.setFixedSize(1920, 1080);
     main_window.setFixedSize(800, 600);
 
-    loginWindow login_window(&main_window);
+    Car check_car("0", "Mercedes", "49.99", "20", "35", "95", "image.png", "saint-petersburg");
+
+
+
+    LoginWindow login_window(&main_window);
     RegistrationWindow registration_window(&main_window);
-    userWindow second_window(&main_window);
+    UserWindow second_window(&main_window, {check_car, check_car, check_car, check_car, check_car, check_car, check_car, check_car, check_car});
 
     QObject::connect(&login_window, SIGNAL(changeToUserWindow()), &second_window, SLOT(show()));
     QObject::connect(&login_window, SIGNAL(changeToRegistrationWindow()), &registration_window, SLOT(show()));
 
     QObject::connect(&registration_window, SIGNAL(changeToLoginWindow()), &login_window, SLOT(show()));
 
-    QPushButton breturn("Return", &second_window);
-    breturn.setFont(QFont("Comic sans", 18, QFont::Bold));
-    breturn.setGeometry(100, 200, 100, 200);
-    QObject::connect(&breturn, SIGNAL(clicked()), &second_window, SLOT(hide()));
-    QObject::connect(&breturn, SIGNAL(clicked()), &login_window, SLOT(show()));
 
     second_window.hide();
     registration_window.hide();
