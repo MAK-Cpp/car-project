@@ -1,8 +1,8 @@
-#include "registrationWindow.h"
+#include "RegistrationWindow.h"
 #include "GeneralDB.h"
 #include <iostream>
 
-registrationWindow::registrationWindow(QWidget *parent)
+RegistrationWindow::RegistrationWindow(QMainWindow *parent)
     : QWidget(parent),
       registration_widget_(this),
       success_widget_(this),
@@ -74,13 +74,13 @@ registrationWindow::registrationWindow(QWidget *parent)
 
 }
 
-void registrationWindow::mousePressEvent(QMouseEvent *event) {
+void RegistrationWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         this->setFocus();
     }
 }
 
-void registrationWindow::registerUser() {
+void RegistrationWindow::registerUser() {
     if (user_name_input_.text().isEmpty() ||
         login_input_.text().isEmpty() ||
         password_input_.text().isEmpty() ||
@@ -90,7 +90,6 @@ void registrationWindow::registerUser() {
         error_label_.setText("Ошибка: пароли не совпадают, попробуйте ещё раз.");
     } else {
         reg_const registration_status = GeneralDB::register_user(user_name_input_.text(), login_input_.text(), password_input_.text());
-//        reg_const registration_status = reg_const::COMPLETE;
         if (registration_status == reg_const::NONE) {
             error_label_.setText("Ошибка: аккаунт с таким логином уже существует, выберите другой.");
         } else {
@@ -103,7 +102,7 @@ void registrationWindow::registerUser() {
     password_input_.clear();
     again_password_input_.clear();
 }
-void registrationWindow::showLoginWindow() {
+void RegistrationWindow::showLoginWindow() {
     user_name_input_.clear();
     login_input_.clear();
     password_input_.clear();

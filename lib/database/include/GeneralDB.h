@@ -4,8 +4,8 @@
 #include "sqlite3.h"
 #include "QString"
 
-enum class access : uint8_t {NONE, USER, ROOT};
-enum class reg_const : bool {NONE, COMPLETE};
+enum class access : uint8_t { NONE, USER, ROOT };
+enum class reg_const : bool { NONE, COMPLETE };
 
 class Car {
 private:
@@ -22,10 +22,9 @@ public:
         QString fuel, QString picture_path, QString town);
 };
 
-
 class GeneralDB {
 private:
-    inline static sqlite3 *data_base_;
+    inline static sqlite3 *data_base_ = nullptr;
     GeneralDB() = default;
 public:
     static void init();
