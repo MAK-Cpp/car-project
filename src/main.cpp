@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 //    main_window.setFixedSize(1920, 1080);
     main_window.setFixedSize(800, 600);
 
-    Car check_car("0", "Mercedes", "49.99", "20", "35", "95", "image.png", "saint-petersburg");
+    Car check_car("0", "benz", "49.99", "20", "35", "95", "image.png", "saint-petersburg", "white", "Mercedes");
 
 
 
