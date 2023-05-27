@@ -4,9 +4,10 @@
 #include <iostream>
 
 Car::Car(QString id, QString name, QString price, QString consumption, QString capacity,
-         QString fuel, QString picture_path, QString town):id{std::move(id)}, name{name},
-                                                           price{price}, consumption{consumption}, capacity{capacity}, fuel{fuel},
-                                                           picture_path{picture_path}, town{town}{
+         QString fuel, QString picture_path, QString town, QString color, QString brand):id{std::move(id)}, name{name},
+                                                           price{price}, consumption{consumption}, capacity{capacity},
+                                                           fuel{fuel}, picture_path{picture_path}, town{town},
+                                                           color{color}, brand{brand}{
 }
 
 std::string toStdString(const QString& x) {
@@ -135,6 +136,8 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
         double fuel = sqlite3_column_double(stmt, 5);
         std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
         std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));
+        std::string color = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 8));
+        std::string brand = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 9));
         auto it = std::find(cars_id.begin(), cars_id.end(), car_id);
         if (it != cars_id.end()){
             result.emplace_back(Car(QString::fromStdString(std::to_string(car_id)),
@@ -144,7 +147,9 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
                                     QString::fromStdString(std::to_string(capacity)),
                                     QString::fromStdString(std::to_string(fuel)),
                                     QString::fromStdString(picture_path),
-                                    QString::fromStdString(town)));
+                                    QString::fromStdString(town),
+                                    QString::fromStdString(color),
+                                    QString::fromStdString(brand)));
         }
     }
     return result;
