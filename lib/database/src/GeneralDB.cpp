@@ -34,7 +34,7 @@ std::string toStdString(const QString &x) {
 void GeneralDB::init() {
     int flag;
     char *zErrMsg = 0;
-    std::filesystem::path const database_path(PROJECT_SOURCE_DIR  "/database/car_project.db");
+    std::filesystem::path const database_path(PROJECT_SOURCE_DIR   "/database/car_project.db");
     flag = sqlite3_open(database_path.string().c_str(), &data_base_);
     if (flag != 0) {
         throw std::filesystem::filesystem_error("Cant open database!!!", std::error_code());
