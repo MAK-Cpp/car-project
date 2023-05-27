@@ -18,8 +18,10 @@ public:
     QString fuel;
     QString picture_path;
     QString town;
+    QString color;
+    QString brand;
     Car(QString id, QString name, QString price, QString consumption, QString capacity,
-        QString fuel, QString picture_path, QString town);
+        QString fuel, QString picture_path, QString town, QString color, QString brand);
 };
 
 class GeneralDB {
