@@ -2,6 +2,7 @@
 #define CARPROJECT_LIB_GUI_INCLUDE_QT_CONFIG_H_
 
 #include <QApplication>
+#include <QCalendarWidget>
 #include <QFontDatabase>
 #include <QFormLayout>
 #include <QLabel>

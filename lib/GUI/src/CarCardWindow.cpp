@@ -32,7 +32,6 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
     grid_layout_.setContentsMargins(0, 0, 0, 0);
     grid_layout_.setVerticalSpacing(0);
     grid_layout_.setSpacing(0);
-//    close_full_screen_.raise();
     close_full_screen_.setFont(QFont(close_full_screen_.font().family(), 20));
     close_full_screen_.setStyleSheet("background-color: rgba(220, 20, 60, 1.0); border: none;");
     QLabel *full_description = new QLabel("Марка: " + car.brand +
@@ -42,8 +41,6 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
         "\nЦена: " + car.price);
     full_description->setStyleSheet("background-color: rgba(0, 0, 0, 0.8);");
     full_description->setFont(QFont(full_description->font().family(), 60));
-//    full_description->setFixedHeight(full_description-);
-//    full_description->setFixedSize(parent->size() / 2);
     grid_layout_.addWidget(full_description);
     grid_layout_.setAlignment(full_description, Qt::AlignCenter);
     QPushButton *full_rent_button = new QPushButton("Арендовать!");
