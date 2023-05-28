@@ -1,15 +1,17 @@
 cmake_minimum_required(VERSION 3.25)
 project(Project)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets Gui UiTools REQUIRED)
 find_package(SQLite3 REQUIRED)
 
 add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
-set(LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui SQLite3)
+set(LIBRARIES Qt6::Core Qt6::Widgets Qt6::Gui Qt6::UiTools SQLite3)
 
 
 link_libraries(${LIBRARIES})
