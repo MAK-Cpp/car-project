@@ -101,12 +101,21 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
 }
 void UserWindow::freeScreenForFullScreen() {
     this->hide();
+    start_calendar_widget_.hide();
+    end_calendar_widget_.hide();
 }
 void UserWindow::returScreenFromFullScreen() {
     this->show();
 }
 void UserWindow::returToLoginWindow() {
     this->hide();
+    start_calendar_widget_.hide();
+    end_calendar_widget_.hide();
+    start_date_ = std::move(*new QDate());
+    end_date_ = std::move(*new QDate());
+    start_calendar_button_.setText("С: ");
+    end_calendar_button_.setText("По: ");
+    search_bar_->clear();
     emit changeToLoginWindow();
 }
 
@@ -146,6 +155,8 @@ void UserWindow::SetEndData(QDate end_date) {
 void UserWindow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         this->setFocus();
+        start_calendar_widget_.hide();
+        end_calendar_widget_.hide();
     }
 }
 
