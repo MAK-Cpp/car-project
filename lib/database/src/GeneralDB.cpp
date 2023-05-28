@@ -3,19 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-Car::Car(QString id, QString name, QString price, QString consumption, QString capacity,
-         QString fuel, QString picture_path, QString town, QString color, QString brand) : id{std::move(id)},
-                                                                                           name{name},
-                                                                                           price{price},
-                                                                                           consumption{consumption},
-                                                                                           capacity{capacity},
-                                                                                           fuel{fuel},
-                                                                                           picture_path{picture_path},
-                                                                                           town{town},
-                                                                                           color{color},
-                                                                                           brand{brand} {
-}
-
 /**
  * Преобразует @b QString в @b std::string
  *
@@ -174,28 +161,28 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
     std::string total_query = "SELECT * FROM cars";
     sqlite3_prepare_v2(data_base_, total_query.c_str(), -1, &stmt, nullptr);
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        int car_id = sqlite3_column_int(stmt, 0);
+        uint64_t car_id = sqlite3_column_int(stmt, 0);
         std::string name = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
-        int price = sqlite3_column_int(stmt, 2);
-        double consumption = sqlite3_column_double(stmt, 3);
-        double capacity = sqlite3_column_double(stmt, 4);
-        double fuel = sqlite3_column_double(stmt, 5);
+        uint64_t price = sqlite3_column_int(stmt, 2);
+        uint64_t consumption = sqlite3_column_double(stmt, 3);
+        uint64_t capacity = sqlite3_column_double(stmt, 4);
+        std::string fuel = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
         std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
         std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));
         std::string color = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 8));
         std::string brand = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 9));
         auto it = std::find(cars_id.begin(), cars_id.end(), car_id);
         if (it != cars_id.end()) {
-            result.emplace_back(Car(QString::fromStdString(std::to_string(car_id)),
-                                    QString::fromStdString(name),
-                                    QString::fromStdString(std::to_string(price)),
-                                    QString::fromStdString(std::to_string(consumption)),
-                                    QString::fromStdString(std::to_string(capacity)),
-                                    QString::fromStdString(std::to_string(fuel)),
-                                    QString::fromStdString(picture_path),
-                                    QString::fromStdString(town),
-                                    QString::fromStdString(color),
-                                    QString::fromStdString(brand)));
+            result.emplace_back(Car(car_id,
+                                    name,
+                                    price,
+                                    consumption,
+                                    capacity,
+                                    fuel,
+                                    picture_path,
+                                    town,
+                                    color,
+                                    brand));
         }
     }
     return result;

@@ -8,7 +8,7 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
       rent_button_(this),
       full_screen_(parent->parentWidget()),
       close_full_screen_("Вернуться", &full_screen_),
-      car_name_(car.name + "\n" + car.town) {
+      car_name_((car.name + "\n" + car.city).c_str()) {
     this->setFixedSize(this->parentWidget()->size() * 0.4);
     this->setLayout(&vertical_layout_);
 
@@ -17,7 +17,7 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
     full_screen_.hide();
 
     rent_button_.setFixedSize(this->size());
-    std::string full_image_path = std::string{PROJECT_SOURCE_DIR} + "/imgs/" + car.picture_path.toUtf8().data();
+    std::string full_image_path = std::string{PROJECT_SOURCE_DIR} + "/imgs/" + car.picture_path;
     if (!exists(std::filesystem::path(full_image_path)) ||
         std::filesystem::is_directory(full_image_path) ||
         std::filesystem::path(full_image_path).extension() != ".png") {
@@ -34,11 +34,11 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
     grid_layout_.setSpacing(0);
     close_full_screen_.setFont(QFont(close_full_screen_.font().family(), 20));
     close_full_screen_.setStyleSheet("background-color: rgba(220, 20, 60, 1.0); border: none;");
-    QLabel *full_description = new QLabel("Марка: " + car.brand +
-        "\nРасход топлива: " + car.consumption +
-        "\nВместимость: " + car.capacity +
+    QLabel *full_description = new QLabel(("Марка: " + car.brand +
+        "\nРасход топлива: " + std::to_string(car.consumption) +
+        "\nВместимость: " + std::to_string(car.capacity) +
         "\nТопливо: " + car.fuel +
-        "\nЦена: " + car.price);
+        "\nЦена: " + std::to_string(car.price)).c_str());
     full_description->setStyleSheet("background-color: rgba(0, 0, 0, 0.8);");
     full_description->setFont(QFont(full_description->font().family(), 60));
     grid_layout_.addWidget(full_description);
