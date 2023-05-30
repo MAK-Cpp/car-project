@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include "QDate"
 
 /**
  * Преобразует @b QString в @b std::string
@@ -13,17 +14,6 @@ std::string toStdString(const QString &x) {
     return std::string{x.toUtf8().data()};
 }
 
-Car::Car(QString name, QString id, QString price, QString consumption, QString capacity,
-         QString fuel, QString picture_path, QString town) : name{std::move(name)},
-                                                             id{id},
-                                                             price{price},
-                                                             consumption{consumption},
-                                                             capacity{capacity},
-                                                             fuel{fuel},
-                                                             picture_path{picture_path},
-                                                             town{town} {
-}
-
 /**
  * Подключается к БД, вызывается один раз при запуске программы.
  *
@@ -32,7 +22,7 @@ Car::Car(QString name, QString id, QString price, QString consumption, QString c
 void GeneralDB::init() {
     int flag;
     char *zErrMsg = 0;
-    std::filesystem::path const database_path(PROJECT_SOURCE_DIR  "/database/car_project.db");
+    std::filesystem::path const database_path(PROJECT_SOURCE_DIR   "/database/car_project.db");
     flag = sqlite3_open(database_path.string().c_str(), &data_base_);
     if (flag != 0) {
         throw std::filesystem::filesystem_error("Cant open database!!!", std::error_code());
@@ -43,33 +33,6 @@ GeneralDB::~GeneralDB() {
     sqlite3_close(data_base_);
 }
 
-bool isDateEarlier(std::string date1, std::string date2) {
-    int day1, month1, year1;
-    int day2, month2, year2;
-
-    sscanf(date1.c_str(), "%d-%d-%d", &day1, &month1, &year1);
-    sscanf(date2.c_str(), "%d-%d-%d", &day2, &month2, &year2);
-
-    if (year1 < year2) {
-        return true;
-    } else if (year1 > year2) {
-        return false;
-    }
-
-    if (month1 < month2) {
-        return true;
-    } else if (month1 > month2) {
-        return false;
-    }
-
-    if (day1 < day2) {
-        return true;
-    } else if (day1 > day2) {
-        return false;
-    }
-
-    return true;
-}
 
 /**
  * Пытается залогинить пользователя.
@@ -139,7 +102,7 @@ reg_const GeneralDB::register_user(QString name_s, QString login_s, QString pass
  * @param end_date_s строка, содержащая конечную дату
  * @return @b std::vector\<@b Car\> машин, подходящих под параметры запроса
  */
-std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QString end_date_s) {
+std::vector<Car> GeneralDB::select_cars(QString line_s, QDate start_date_s, QDate end_date_s) {
     std::vector<Car> result;
     std::vector<int> cars_id;
     sqlite3_stmt *stmt1;
@@ -154,12 +117,12 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
         std::string one_query = "SELECT start_date, end_date FROM sells WHERE car_id = " + std::to_string(car_id);
         sqlite3_prepare_v2(data_base_, one_query.c_str(), -1, &stmt2, nullptr);
         while (sqlite3_step(stmt2) == SQLITE_ROW) {
-            std::string start_date = reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0));
-            std::string end_date = reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1));
-            if ((isDateEarlier(start_date, toStdString(end_date_s)) &&
-                isDateEarlier(toStdString(start_date_s), start_date)) ||
-                (isDateEarlier(end_date, toStdString(end_date_s)) &&
-                    isDateEarlier(toStdString(start_date_s), end_date))) {
+            QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0)), "MM-dd-yyyy");
+            QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "MM-dd-yyyy");
+            if ((start_date <= end_date_s &&
+                start_date_s <= start_date) ||
+                (end_date <= end_date_s &&
+                    start_date_s <= end_date)) {
                 flag = false;
                 break;
             }
@@ -172,25 +135,58 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QString start_date_s, QS
     std::string total_query = "SELECT * FROM cars";
     sqlite3_prepare_v2(data_base_, total_query.c_str(), -1, &stmt, nullptr);
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        int car_id = sqlite3_column_int(stmt, 0);
+        uint64_t car_id = sqlite3_column_int(stmt, 0);
         std::string name = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
-        int price = sqlite3_column_int(stmt, 2);
-        double consumption = sqlite3_column_double(stmt, 3);
-        double capacity = sqlite3_column_double(stmt, 4);
-        double fuel = sqlite3_column_double(stmt, 5);
+        uint64_t price = sqlite3_column_int(stmt, 2);
+        uint64_t consumption = sqlite3_column_double(stmt, 3);
+        uint64_t capacity = sqlite3_column_double(stmt, 4);
+        std::string fuel = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
         std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
         std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));
+        std::string color = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 8));
+        std::string brand = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 9));
         auto it = std::find(cars_id.begin(), cars_id.end(), car_id);
         if (it != cars_id.end()) {
-            result.emplace_back(Car(QString::fromStdString(std::to_string(car_id)),
-                                    QString::fromStdString(name),
-                                    QString::fromStdString(std::to_string(price)),
-                                    QString::fromStdString(std::to_string(consumption)),
-                                    QString::fromStdString(std::to_string(capacity)),
-                                    QString::fromStdString(std::to_string(fuel)),
-                                    QString::fromStdString(picture_path),
-                                    QString::fromStdString(town)));
+            result.emplace_back(Car(car_id,
+                                    name,
+                                    price,
+                                    consumption,
+                                    capacity,
+                                    fuel,
+                                    picture_path,
+                                    town,
+                                    color,
+                                    brand));
         }
     }
     return result;
+}
+
+bool GeneralDB::insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s){
+    char *zErrMsg;
+    sqlite3_stmt *stmt;
+    int rc;
+    std::string query = "INSERT INTO sells (user_id, car_id, start_date, end_date, ) VALUES ('" + toStdString(user_id_s) + "', '"
+            + toStdString(car_id_s) +
+            "', '" + toStdString(start_date_s.toString("dd-MM-yyyy")) + "', '" + toStdString(end_date_s.toString("dd-MM-yyyy")) + "', "
+            + std::to_string(total_sum_s) + ")";
+    rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        throw std::runtime_error(zErrMsg);
+    }
+    return true;
+}
+
+bool GeneralDB::insert_car(Car const &new_car){
+    char *zErrMsg;
+    sqlite3_stmt *stmt;
+    int rc;
+    std::string query = "INSERT INTO cars (name, price, consumption, capacity, fuel, picture_path, town, color, brand) VALUES ('" + new_car.name + "', "
+                        + std::to_string(new_car.price)+ ", " + std::to_string(new_car.consumption) + ", " + std::to_string(new_car.capacity) + ", '"
+                        + new_car.fuel + "', '" + new_car.picture_path + "', '" + new_car.city + "', '" + new_car.color + "', '" + new_car.brand + "')";
+    rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        throw std::runtime_error(zErrMsg);
+    }
+    return true;
 }

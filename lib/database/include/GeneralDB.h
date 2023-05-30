@@ -3,26 +3,11 @@
 #include <filesystem>
 #include "sqlite3.h"
 #include "QString"
-
+#include "Car.h"
+#include "QDate"
 enum class access : uint8_t { NONE, USER, ROOT };
 enum class reg_const : bool { NONE, COMPLETE };
 
-class Car {
-private:
-public:
-    QString id;
-    QString name;
-    QString price;
-    QString consumption;
-    QString capacity;
-    QString fuel;
-    QString picture_path;
-    QString town;
-    QString color;
-    QString brand;
-    Car(QString id, QString name, QString price, QString consumption, QString capacity,
-        QString fuel, QString picture_path, QString town, QString color, QString brand);
-};
 
 class GeneralDB {
 private:
@@ -37,11 +22,13 @@ public:
 
     static access check_user(QString login_s, QString password_s);
 
-    static std::vector<Car> select_cars(QString line_s, QString start_date_s, QString end_date_s);
+    static std::vector<Car> select_cars(QString line_s, QDate start_date_s, QDate end_date_s);
 
     static bool insert_car(Car const &new_car);
 
     static bool delete_car(int id);
+
+    static bool insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s);
 };
 
 #endif //CAR_PROJECT_GENERALDB_H

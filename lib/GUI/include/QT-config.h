@@ -1,22 +1,17 @@
 #ifndef CARPROJECT_LIB_GUI_INCLUDE_QT_CONFIG_H_
 #define CARPROJECT_LIB_GUI_INCLUDE_QT_CONFIG_H_
 
-#include <QWidget>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QObject>
-#include <QMouseEvent>
-#include <QString>
-#include <QByteArray>
-#include <QVBoxLayout>
+#include <QApplication>
+#include <QCalendarWidget>
+#include <QFontDatabase>
 #include <QFormLayout>
 #include <QLabel>
-#include <QPalette>
-#include <QFontDatabase>
+#include <QLineEdit>
 #include <QMainWindow>
-#include <QApplication>
-#include <QVector>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPushButton>
 #include <QScrollArea>
-#include <QScrollBar>
+#include <QUiLoader>
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_QT_CONFIG_H_
