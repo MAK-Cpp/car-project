@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include "QDate"
 
 /**
  * Преобразует @b QString в @b std::string
@@ -58,36 +59,9 @@ std::vector<Car> GeneralDB::getAllCars() {
                                 town,
                                 color,
                                 brand));
+
     }
     return result;
-}
-
-bool isDateEarlier(std::string date1, std::string date2) {
-    int day1, month1, year1;
-    int day2, month2, year2;
-
-    sscanf(date1.c_str(), "%d-%d-%d", &day1, &month1, &year1);
-    sscanf(date2.c_str(), "%d-%d-%d", &day2, &month2, &year2);
-
-    if (year1 < year2) {
-        return true;
-    } else if (year1 > year2) {
-        return false;
-    }
-
-    if (month1 < month2) {
-        return true;
-    } else if (month1 > month2) {
-        return false;
-    }
-
-    if (day1 < day2) {
-        return true;
-    } else if (day1 > day2) {
-        return false;
-    }
-
-    return true;
 }
 
 /**
@@ -154,8 +128,8 @@ reg_const GeneralDB::register_user(QString name_s, QString login_s, QString pass
  * Возвращает @b std::vector\<@b Car\>, содержащий все машины, доступные в выбранное время.
  *
  * @param line_s строка, содержащая запрос пользователя по типу машины
- * @param start_date_s строка, содержащая стартовую дату
- * @param end_date_s строка, содержащая конечную дату
+ * @param users_start_date строка, содержащая стартовую дату
+ * @param users_end_date строка, содержащая конечную дату
  * @return @b std::vector\<@b Car\> машин, подходящих под параметры запроса
  */
 std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_date, QDate users_end_date) {
@@ -174,7 +148,7 @@ std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_d
         while (sqlite3_step(stmt2) == SQLITE_ROW) {
             QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0)), "dd-MM-yyyy");
             QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "dd-MM-yyyy");
-            if (start_date <= users_start_date && users_end_date <= end_date) {
+            if (end_date < users_start_date || users_end_date < start_date) {
                 continue;
             } else {
                 flag = false;
@@ -186,4 +160,33 @@ std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_d
         }
     }
     return cars_id;
+}
+
+bool GeneralDB::insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s){
+    char *zErrMsg;
+    sqlite3_stmt *stmt;
+    int rc;
+    std::string query = "INSERT INTO sells (user_id, car_id, start_date, end_date, ) VALUES ('" + toStdString(user_id_s) + "', '"
+            + toStdString(car_id_s) +
+            "', '" + toStdString(start_date_s.toString("dd-MM-yyyy")) + "', '" + toStdString(end_date_s.toString("dd-MM-yyyy")) + "', "
+            + std::to_string(total_sum_s) + ")";
+    rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        throw std::runtime_error(zErrMsg);
+    }
+    return true;
+}
+
+bool GeneralDB::insert_car(Car const &new_car){
+    char *zErrMsg;
+    sqlite3_stmt *stmt;
+    int rc;
+    std::string query = "INSERT INTO cars (name, price, consumption, capacity, fuel, picture_path, town, color, brand) VALUES ('" + new_car.name + "', "
+                        + std::to_string(new_car.price)+ ", " + std::to_string(new_car.consumption) + ", " + std::to_string(new_car.capacity) + ", '"
+                        + new_car.fuel + "', '" + new_car.picture_path + "', '" + new_car.city + "', '" + new_car.color + "', '" + new_car.brand + "')";
+    rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        throw std::runtime_error(zErrMsg);
+    }
+    return true;
 }
