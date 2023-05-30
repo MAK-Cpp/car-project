@@ -59,6 +59,7 @@ std::vector<Car> GeneralDB::getAllCars() {
                                 town,
                                 color,
                                 brand));
+
     }
     return result;
 }

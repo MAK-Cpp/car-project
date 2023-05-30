@@ -21,19 +21,19 @@ int main(int argc, char *argv[]) {
 //    main_window.setFixedSize(1920, 1080);
     main_window.setFixedSize(800, 600);
 
-    Car check_car(0, "benz", 49.99, 20, 35, "95", "image.png", "saint-petersburg", "white", "Mercedes");
-
-    Car a(2, "Bentley Bentayga First Edition" , 59000, 4, 550, "бензин", "Bentley_Bentayga_First_Edition.png", "Москва", "черный", "bentley");
-    Car b(3, "Bentley Continental GT W12", 65000, 6, 635.0, "бензин", "Bentley_Continental_GT_W12.png", "Москва", "синий", "bentley");
-    Car c(4, "BMW X5 M-SPORT", 18900, 3, 340., "бензин", "BMW_X5_M-SPORT.png", "Минск", "черный", "bmw");
-    Car d(5, "BMW X7 M-SPORT", 21000, 3, 249., "дизель", "BMW_X7_M-SPORT.png", "Москва", "черный", "bmw");
-    Car e(6, "BMW X6 M-SPORT", 20000, 3, 249., "дизель", "BMW_X6_M-SPORT.png", "Москва", "черный", "bmw");
+//    Car check_car(0, "benz", 49.99, 20, 35, "95", "image.png", "saint-petersburg", "white", "Mercedes");
+//
+//    Car a(2, "Bentley Bentayga First Edition" , 59000, 4, 550, "бензин", "Bentley_Bentayga_First_Edition.png", "Москва", "черный", "bentley");
+//    Car b(3, "Bentley Continental GT W12", 65000, 6, 635.0, "бензин", "Bentley_Continental_GT_W12.png", "Москва", "синий", "bentley");
+//    Car c(4, "BMW X5 M-SPORT", 18900, 3, 340., "бензин", "BMW_X5_M-SPORT.png", "Минск", "черный", "bmw");
+//    Car d(5, "BMW X7 M-SPORT", 21000, 3, 249., "дизель", "BMW_X7_M-SPORT.png", "Москва", "черный", "bmw");
+//    Car e(6, "BMW X6 M-SPORT", 20000, 3, 249., "дизель", "BMW_X6_M-SPORT.png", "Москва", "черный", "bmw");
 
 
 
     LoginWindow login_window(&main_window);
     RegistrationWindow registration_window(&main_window);
-    UserWindow user_window(&main_window, {check_car, a, b, c, d, e});
+    UserWindow user_window(&main_window, GeneralDB::getAllCars());
 
     QObject::connect(&login_window, SIGNAL(changeToUserWindow()), &user_window, SLOT(show()));
     QObject::connect(&login_window, SIGNAL(changeToRegistrationWindow()), &registration_window, SLOT(show()));
