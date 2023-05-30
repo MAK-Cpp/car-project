@@ -28,6 +28,8 @@ public:
 
     static bool delete_car(int id);
 
+    static std::vector<Car> getAllCars();
+
     static bool insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s);
 };
 
