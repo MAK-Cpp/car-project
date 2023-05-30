@@ -20,6 +20,8 @@ int main(int argc, char *argv[]) {
 //    main_window.setFixedSize(1680, 1050);
 //    main_window.setFixedSize(1920, 1080);
     main_window.setFixedSize(800, 600);
+    main_window.setPalette(QPalette(QColor::fromRgb(48, 48, 48)));
+    main_window.setAutoFillBackground(true);
 
 //    Car check_car(0, "benz", 49.99, 20, 35, "95", "image.png", "saint-petersburg", "white", "Mercedes");
 //

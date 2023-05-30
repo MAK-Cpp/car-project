@@ -19,6 +19,11 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
       start_calendar_button_("С: "),
       end_calendar_button_("По: "){
 
+    start_calendar_button_.setStyleSheet("color : white;");
+    end_calendar_button_.setStyleSheet("color : white;");
+
+
+
     vertical_layout_ = new QVBoxLayout();
     horisontal_layout_ = new QHBoxLayout();
     grid_layout_ = new QGridLayout();
@@ -38,16 +43,19 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
     search_container_.setLayout(horisontal_layout_);
     search_container_.setContentsMargins(0, 0, 0, 0);
     search_container_.setFixedSize(this->width(), this->height() * 0.1);
-    search_container_.setPalette(QPalette(QPalette::Window, Qt::darkGray));
+    search_container_.setPalette(QPalette(QPalette::Window, Qt::black));
     search_container_.setAutoFillBackground(true);
     exit_.setFixedSize(search_container_.height() * 0.8, search_container_.height() * 0.8);
 
     horisontal_layout_->setAlignment(Qt::AlignVCenter);
 
+    towns_ = new QComboBox();
+
+
     search_bar_ = new QLineEdit();
-    search_bar_->setFixedHeight(search_container_.height() * 0.8);
+    search_bar_->setFixedHeight(search_container_.height() * 0.4);
     search_bar_->setFixedWidth(search_container_.width() * 0.3);
-    search_bar_->setPalette(QPalette(QPalette::Window, Qt::white));
+    search_bar_->setPalette(QPalette(QPalette::Window, Qt::gray));
     search_bar_->setAutoFillBackground(true);
 
     start_calendar_button_.setFixedHeight(search_container_.height() * 0.8);
