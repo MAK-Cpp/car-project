@@ -22,7 +22,7 @@ public:
 
     static access check_user(QString login_s, QString password_s);
 
-    static std::vector<Car> select_cars(QString line_s, QDate start_date_s, QDate end_date_s);
+    static std::vector<uint64_t> select_cars(QString line_s, QDate start_date_s, QDate end_date_s);
 
     static bool insert_car(Car const &new_car);
 

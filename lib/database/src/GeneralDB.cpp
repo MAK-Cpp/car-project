@@ -102,9 +102,8 @@ reg_const GeneralDB::register_user(QString name_s, QString login_s, QString pass
  * @param end_date_s строка, содержащая конечную дату
  * @return @b std::vector\<@b Car\> машин, подходящих под параметры запроса
  */
-std::vector<Car> GeneralDB::select_cars(QString line_s, QDate start_date_s, QDate end_date_s) {
-    std::vector<Car> result;
-    std::vector<int> cars_id;
+std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate start_date_s, QDate end_date_s) {
+    std::vector<uint64_t> cars_id;
     sqlite3_stmt *stmt1;
     int rc;
     bool flag = true;
@@ -117,8 +116,8 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QDate start_date_s, QDat
         std::string one_query = "SELECT start_date, end_date FROM sells WHERE car_id = " + std::to_string(car_id);
         sqlite3_prepare_v2(data_base_, one_query.c_str(), -1, &stmt2, nullptr);
         while (sqlite3_step(stmt2) == SQLITE_ROW) {
-            QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0)), "MM-dd-yyyy");
-            QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "MM-dd-yyyy");
+            QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0)), "dd-MM-yyyy");
+            QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "dd-MM-yyyy");
             if ((start_date <= end_date_s &&
                 start_date_s <= start_date) ||
                 (end_date <= end_date_s &&
@@ -131,35 +130,7 @@ std::vector<Car> GeneralDB::select_cars(QString line_s, QDate start_date_s, QDat
             cars_id.emplace_back(car_id);
         }
     }
-    sqlite3_stmt *stmt;
-    std::string total_query = "SELECT * FROM cars";
-    sqlite3_prepare_v2(data_base_, total_query.c_str(), -1, &stmt, nullptr);
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        uint64_t car_id = sqlite3_column_int(stmt, 0);
-        std::string name = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
-        uint64_t price = sqlite3_column_int(stmt, 2);
-        uint64_t consumption = sqlite3_column_double(stmt, 3);
-        uint64_t capacity = sqlite3_column_double(stmt, 4);
-        std::string fuel = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
-        std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
-        std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));
-        std::string color = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 8));
-        std::string brand = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 9));
-        auto it = std::find(cars_id.begin(), cars_id.end(), car_id);
-        if (it != cars_id.end()) {
-            result.emplace_back(Car(car_id,
-                                    name,
-                                    price,
-                                    consumption,
-                                    capacity,
-                                    fuel,
-                                    picture_path,
-                                    town,
-                                    color,
-                                    brand));
-        }
-    }
-    return result;
+    return cars_id;
 }
 
 bool GeneralDB::insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s){
