@@ -21,7 +21,6 @@ public:
 
     static std::vector<Car> getAllCars();
 
-
     static reg_const register_user(QString name_s, QString login_s, QString password_s);
 
     static access check_user(QString login_s, QString password_s);
@@ -31,8 +30,6 @@ public:
     static bool insert_car(Car const &new_car);
 
     static bool delete_car(int id);
-
-    static std::vector<Car> getAllCars();
 
     static bool insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s);
 };

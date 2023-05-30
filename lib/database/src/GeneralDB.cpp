@@ -183,7 +183,7 @@ bool GeneralDB::insert_car(Car const &new_car){
     int rc;
     std::string query = "INSERT INTO cars (name, price, consumption, capacity, fuel, picture_path, town, color, brand) VALUES ('" + new_car.name + "', "
                         + std::to_string(new_car.price)+ ", " + std::to_string(new_car.consumption) + ", " + std::to_string(new_car.capacity) + ", '"
-                        + new_car.fuel + "', '" + new_car.picture_path + "', '" + new_car.city + "', '" + new_car.color + "', '" + new_car.brand + "')";
+                        + new_car.fuel + "', '" + new_car.picture_path + "', '" + new_car.town + "', '" + new_car.color + "', '" + new_car.brand + "')";
     rc = sqlite3_exec(data_base_, query.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         throw std::runtime_error(zErrMsg);
