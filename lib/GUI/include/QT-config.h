@@ -3,6 +3,8 @@
 
 #include <QApplication>
 #include <QCalendarWidget>
+#include <QColor>
+#include <QComboBox>
 #include <QFontDatabase>
 #include <QFormLayout>
 #include <QLabel>

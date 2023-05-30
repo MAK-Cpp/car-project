@@ -16,6 +16,7 @@ protected:
 private:
     QCalendarWidget start_calendar_widget_;
     QCalendarWidget end_calendar_widget_;
+    QComboBox *towns_;
     QGridLayout *grid_layout_;
     QVBoxLayout *vertical_layout_;
     QHBoxLayout *horisontal_layout_;

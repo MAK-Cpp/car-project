@@ -1,6 +1,5 @@
 #include "GeneralDB.h"
 #include <string>
-#include <algorithm>
 #include <iostream>
 #include "QDate"
 
