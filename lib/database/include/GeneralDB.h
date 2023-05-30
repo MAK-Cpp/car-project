@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <QDate>
 #include <map>
+#include <set>
 #include "sqlite3.h"
 #include "QString"
 #include "Car.h"
@@ -30,7 +31,7 @@ public:
 
     static access check_user(QString login_s, QString password_s);
 
-    static std::vector<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s);
+    static std::set<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s);
 
     static bool insert_car(Car const &new_car);
 

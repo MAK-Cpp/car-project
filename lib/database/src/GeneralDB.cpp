@@ -131,12 +131,11 @@ reg_const GeneralDB::register_user(QString name_s, QString login_s, QString pass
  * @param users_end_date строка, содержащая конечную дату
  * @return @b std::vector\<@b Car\> машин, подходящих под параметры запроса
  */
-std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s) {
-    std::vector<uint64_t> cars_id;
+std::set<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s) {
+    std::set<uint64_t> cars_id;
     sqlite3_stmt *stmt1;
-    int rc;
     bool flag = true;
-    std::string query = "SELECT DISTINCT car_id FROM cars WHERE name LIKE '%" + toStdString(line_s) + "%' and town LIKE '" + toStdString(town_s) + "'";
+    std::string query = "SELECT DISTINCT car_id FROM cars WHERE name LIKE '%" + toStdString(line_s) + "%' and town = '" + toStdString(town_s) + "'";
     sqlite3_prepare_v2(data_base_, query.c_str(), -1, &stmt1, nullptr);
     while (sqlite3_step(stmt1) == SQLITE_ROW) {
         int car_id = sqlite3_column_int(stmt1, 0);
@@ -155,7 +154,7 @@ std::vector<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_d
             }
         }
         if (flag) {
-            cars_id.emplace_back(car_id);
+            cars_id.insert(car_id);
         }
     }
     return cars_id;
