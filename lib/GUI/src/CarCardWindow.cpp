@@ -8,7 +8,7 @@ CarCardWindow::CarCardWindow(QWidget *parent, const Car &car)
       rent_button_(this),
       full_screen_(parent->parentWidget()),
       close_full_screen_("Вернуться", &full_screen_),
-      car_name_((car.name + "\n" + car.city).c_str()) {
+      car_name_((car.name + "\n" + car.town).c_str()) {
     this->setFixedSize(this->parentWidget()->size() * 0.4);
     this->setLayout(&vertical_layout_);
 
