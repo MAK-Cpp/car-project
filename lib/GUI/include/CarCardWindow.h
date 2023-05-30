@@ -14,7 +14,13 @@
 class CarCardWindow : public QWidget{
 Q_OBJECT
 public:
-    explicit CarCardWindow(QWidget *parent, const Car& car);
+    explicit CarCardWindow(const QWidget *parent, const Car& car);
+    CarCardWindow(const CarCardWindow& other);
+//    CarCardWindow(const CarCardWindow&& other);
+
+    CarCardWindow& operator=(const CarCardWindow& other);
+
+    [[nodiscard]] uint64_t car_id() const;
 private:
     QLabel full_screen_;
     QPushButton rent_button_;
@@ -24,6 +30,8 @@ private:
     QGridLayout grid_layout_;
     QLabel car_name_;
     QPixmap car_image_pixmap_;
+    uint64_t car_id_;
+    QLabel *full_description_;
 public slots:
     void openFullScreen();
     void closeFullScreen();

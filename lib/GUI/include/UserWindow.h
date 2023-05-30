@@ -4,6 +4,7 @@
 #include "QT-config.h"
 #include "CarCardWindow.h"
 #include <vector>
+#include <QVector>
 
 
 class UserWindow : public QWidget {
@@ -30,6 +31,7 @@ private:
     QPushButton start_calendar_button_;
     QPushButton end_calendar_button_;
     inline static QString date_format_ = "dd.MM.yyyy";
+    std::vector <std::pair<const QWidget*, const Car>> cars_buttons_;
 public slots:
     void freeScreenForFullScreen();
     void returScreenFromFullScreen();
@@ -38,6 +40,7 @@ public slots:
     void EndCalendarVisibility();
     void SetStartData(QDate);
     void SetEndData(QDate);
+    void MakeRequest();
 signals:
     void changeToLoginWindow();
 };

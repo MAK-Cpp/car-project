@@ -1,6 +1,6 @@
 #include "Car.h"
 
-Car::Car(uint64_t id,
+Car::Car(uint64_t car_id,
          std::string name,
          uint64_t price,
          uint64_t consumption,
