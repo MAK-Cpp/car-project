@@ -2,6 +2,7 @@
 #define CAR_PROJECT_GENERALDB_H
 #include <filesystem>
 #include <QDate>
+#include <map>
 #include "sqlite3.h"
 #include "QString"
 #include "Car.h"
@@ -9,6 +10,10 @@
 enum class access : uint8_t { NONE, USER, ROOT };
 enum class reg_const : bool { NONE, COMPLETE };
 
+const std::map<std::string, double> price_coefficient {{"Минск" , 0.037},
+                                                       {"Москва", 1.},
+                                                       {"Санкт-Петербург", 1.},
+                                                       {"Вашингтон", 0.012}};
 
 class GeneralDB {
 private:
@@ -25,7 +30,7 @@ public:
 
     static access check_user(QString login_s, QString password_s);
 
-    static std::vector<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date);
+    static std::vector<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s);
 
     static bool insert_car(Car const &new_car);
 

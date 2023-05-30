@@ -16,7 +16,7 @@ LoginWindow::LoginWindow(QMainWindow *parent)
     this->setFixedSize(parent->width(), parent->height());
 
     name_label_.setFont(QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(
-        PROJECT_SOURCE_DIR "/fonts/brushscriptmtrusbyme_italic.otf")).at(0), 80));
+        PROJECT_SOURCE_DIR "/fonts/brushscriptmtrusbyme_italic.otf")).at(0), 60));
 
     QPalette error_text_color;
     error_text_color.setColor(QPalette::WindowText, Qt::red);
