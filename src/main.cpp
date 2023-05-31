@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 //    main_window.setFixedSize(1680, 1050);
 //    main_window.setFixedSize(1920, 1080);
     main_window.setFixedSize(800, 600);
-    main_window.setPalette(QPalette(QColor::fromRgb(48, 48, 48)));
+    main_window.setStyleSheet("background-color : rgb(155, 171, 184);");
     main_window.setAutoFillBackground(true);
 
 

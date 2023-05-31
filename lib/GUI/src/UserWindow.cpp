@@ -40,10 +40,6 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
       add_car_(this){
 
 
-
-    start_calendar_button_.setStyleSheet("color : white; background-color: gray;");
-    end_calendar_button_.setStyleSheet("color : white; background-color: gray;");
-
     vertical_layout_ = new QVBoxLayout();
     horisontal_layout_ = new QHBoxLayout();
     grid_layout_ = new QGridLayout();
@@ -78,7 +74,6 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     }
     towns_->setFixedWidth(search_container_.width() * 0.2);
     towns_->setFixedHeight(search_container_.height() * 0.8);
-    towns_->setStyleSheet("background-color: gray; color: red");
     towns_->setAutoFillBackground(true);
 
     search_bar_ = new QLineEdit();
@@ -160,6 +155,15 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     add_car_.raise();
     add_car_.hide();
     QObject::connect(&add_car_, SIGNAL(clicked()), this, SLOT(showRootWindow()));
+
+    start_calendar_button_.setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    end_calendar_button_.setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    towns_->setStyleSheet("background-color: rgb(215, 192, 174); color: black;");
+    search_bar_->setStyleSheet("background-color: rgb(215, 192, 174); color: black; border : none;");
+    exit_.setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    search_button_->setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    search_container_.setStyleSheet("background-color: rgb(69, 69, 69);");
+
 
 }
 void UserWindow::freeScreenForFullScreen() {
@@ -269,7 +273,6 @@ void UserWindow::MakeRequest() {
     delete grid_layout_;
     grid_layout_ = new QGridLayout();
     for (int i = 0, pos = 0; i < cars_buttons_.size(); ++i) {
-        std::cout << cars_buttons_[i].car_id << '\n';
         if (car_ids.find(cars_buttons_[i].car_id) != car_ids.end()) {
             addNewCarButton(cars_buttons_[i], (pos >> 1), (pos & 1));
             ++pos;
