@@ -35,8 +35,6 @@ public:
 
     static bool insert_car(Car const &new_car);
 
-    static bool delete_car(int id);
-
     static bool insert_sell(uint64_t user_id_s, uint64_t car_id_s, QDate start_date_s, QDate end_date_s, uint64_t total_sum_s);
 };
 

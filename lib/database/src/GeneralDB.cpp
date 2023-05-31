@@ -202,3 +202,4 @@ bool GeneralDB::insert_car(Car const &new_car){
     }
     return true;
 }
+
