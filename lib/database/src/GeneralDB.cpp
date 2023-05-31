@@ -72,22 +72,23 @@ std::vector<Car> GeneralDB::getAllCars() {
  * @return access::USER, если вошел обычный пользователь
  * @return access::ROOT, если зашел администратор
  */
-access GeneralDB::check_user(QString login_s, QString password_s) {
+std::pair<int, access> GeneralDB::check_user(QString login_s, QString password_s) {
     sqlite3_stmt *stmt;
-    std::string query = "SELECT login, password, root FROM users";
+    std::string query = "SELECT login, password, root, id FROM users";
     sqlite3_prepare_v2(data_base_, query.c_str(), -1, &stmt, nullptr);
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         std::string login = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
         std::string password = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
         int root = sqlite3_column_int(stmt, 2);
+        int user_id = sqlite3_column_int(stmt, 3);
         if (QString::fromStdString(login) == login_s && QString::fromStdString(password) == password_s) {
             if (root == 1) {
-                return access::USER;
+                return {user_id, access::USER};
             }
-            return access::ROOT;
+            return {user_id, access::ROOT};
         }
     }
-    return access::NONE;
+    return {-1, access::NONE};
 }
 
 /**
