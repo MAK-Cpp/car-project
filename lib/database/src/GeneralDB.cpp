@@ -202,4 +202,25 @@ bool GeneralDB::insert_car(Car const &new_car){
     }
     return true;
 }
+bool SortTyapl(const std::tuple<uint64_t, QDate, QDate, uint64_t>& a,
+                         const std::tuple<uint64_t, QDate, QDate, uint64_t>& b) {
+    return std::get<1>(a) < std::get<1>(b);
+}
 
+std::vector<std::tuple<uint64_t, QDate, QDate, uint64_t>> GeneralDB::get_rented_car(uint64_t user_id){
+    sqlite3_stmt *stmt2;
+    std::vector<std::tuple<uint64_t, QDate, QDate, uint64_t>> result;
+    std::string one_query = "SELECT car_id, start_date, end_date, total_price FROM sells WHERE user_id = " + std::to_string(user_id);
+    sqlite3_prepare_v2(data_base_, one_query.c_str(), -1, &stmt2, nullptr);
+    while (sqlite3_step(stmt2) == SQLITE_ROW) {
+
+        uint64_t car_id = sqlite3_column_int(stmt2, 0);
+        QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "dd-MM-yyyy");
+        QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 2)), "dd-MM-yyyy");
+        uint64_t total_price = sqlite3_column_int(stmt2, 3);
+        std::tuple<uint64_t, QDate, QDate, uint64_t> record(car_id, start_date, end_date, total_price);
+        result.emplace_back(record);
+    }
+    std::sort(result.begin(), result.end(), SortTyapl);
+    return result;
+}
