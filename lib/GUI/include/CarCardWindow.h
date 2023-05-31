@@ -15,11 +15,6 @@ class CarCardWindow : public QWidget{
 Q_OBJECT
 public:
     explicit CarCardWindow(const QWidget *parent, const Car& car);
-    CarCardWindow(const CarCardWindow& other);
-//    CarCardWindow(const CarCardWindow&& other);
-
-    CarCardWindow& operator=(const CarCardWindow& other);
-
     [[nodiscard]] uint64_t car_id() const;
 private:
     QLabel full_screen_;
@@ -31,13 +26,16 @@ private:
     QLabel car_name_;
     QPixmap car_image_pixmap_;
     uint64_t car_id_;
+    uint64_t car_price_;
     QLabel *full_description_;
 public slots:
     void openFullScreen();
     void closeFullScreen();
+    void callRent();
 signals:
     void showFullScreen();
     void hideFullScreen();
+    void makeRent(uint64_t, uint64_t);
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_CARCARDWINDOW_H_

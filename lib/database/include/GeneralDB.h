@@ -11,10 +11,10 @@
 enum class access : uint8_t { NONE, USER, ROOT };
 enum class reg_const : bool { NONE, COMPLETE };
 
-const std::map<std::string, double> price_coefficient {{"Минск" , 0.037},
-                                                       {"Москва", 1.},
-                                                       {"Санкт-Петербург", 1.},
-                                                       {"Вашингтон", 0.012}};
+const std::map<std::string, std::pair<double, std::string>> price_coefficient {{"Минск" , {0.037, "Бел. руб."}},
+                                                       {"Москва", {1., "Руб."}},
+                                                       {"Санкт-Петербург", {1., "Руб."}},
+                                                       {"Вашингтон", {0.012, "Долл."}}};
 
 class GeneralDB {
 private:
@@ -37,7 +37,7 @@ public:
 
     static bool delete_car(int id);
 
-    static bool insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s);
+    static bool insert_sell(uint64_t user_id_s, uint64_t car_id_s, QDate start_date_s, QDate end_date_s, uint64_t total_sum_s);
 };
 
 #endif //CAR_PROJECT_GENERALDB_H
