@@ -2,6 +2,7 @@
 #define CARPROJECT_LIB_GUI_INCLUDE_LOGINWINDOW_H_
 
 #include "QT-config.h"
+#include "GeneralDB.h"
 #include <string>
 
 
@@ -14,7 +15,7 @@ public slots:
     void showUserWindow();
     void showRegistrationWindow();
 signals:
-    void changeToUserWindow(uint64_t);
+    void changeToUserWindow(uint64_t, access);
     void changeToRegistrationWindow();
 private:
     QVBoxLayout vertical_box_layout_;

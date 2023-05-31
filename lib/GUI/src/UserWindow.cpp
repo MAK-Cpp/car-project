@@ -4,7 +4,7 @@
 #include <Qpair>
 
 void clearLayout(QLayout *layout) {
-    if (layout == NULL)
+    if (layout == nullptr)
         return;
     QLayoutItem *item;
     while ((item = layout->takeAt(0))) {
@@ -36,7 +36,10 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
       exit_("Выйти"),
       start_calendar_button_("С: "),
       end_calendar_button_("По: "),
-      cars_buttons_(cars){
+      cars_buttons_(cars),
+      add_car_(this){
+
+
 
     start_calendar_button_.setStyleSheet("color : white; background-color: gray;");
     end_calendar_button_.setStyleSheet("color : white; background-color: gray;");
@@ -123,7 +126,7 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     grid_layout_->setVerticalSpacing(this->height() / 20);
 
     buttons_container_.setLayout(grid_layout_);
-    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
+//    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
 
     scroll_area_.setWidget(&buttons_container_);
     scroll_area_.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -136,6 +139,28 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     start_calendar_widget_.move((this->width() - start_calendar_widget_.width()) / 2, search_container_.height());
     end_calendar_widget_.raise();
     end_calendar_widget_.move((this->width() - end_calendar_widget_.width()) / 2, search_container_.height());
+
+
+    QPushButton* user_account_button = new QPushButton(this);
+    user_account_button->setFixedSize(this->height() / 11, this->height() / 11);
+    user_account_button->move(this->width() - user_account_button->width(), this->height() - user_account_button->height());
+    user_account_button->setStyleSheet("background-color: rgba(89, 81, 168, 1.0); border: none;");
+    user_account_button->setMask(QRegion(QRect(0, 0, this->height() / 11, this->height() / 11), QRegion::Ellipse));
+    user_account_button->setIcon(QIcon(PROJECT_SOURCE_DIR "/svg/user-circle-svgrepo-com.svg"));
+    user_account_button->setIconSize(user_account_button->size());
+    user_account_button->raise();
+    QObject::connect(user_account_button, SIGNAL(clicked()), this, SLOT(showUserAccount()));
+
+    add_car_.setFixedSize(this->height() / 11, this->height() / 11);
+    add_car_.move(0, this->height() - user_account_button->height());
+    add_car_.setStyleSheet("background-color: rgba(46, 204, 113, 1.0); ");
+    add_car_.setMask(QRegion(QRect(0, 0, this->height() / 11, this->height() / 11), QRegion::Ellipse));
+    add_car_.setIcon(QIcon(PROJECT_SOURCE_DIR "/svg/plus-database-svgrepo-com.svg"));
+    add_car_.setIconSize(user_account_button->size() * 0.8);
+    add_car_.raise();
+    add_car_.hide();
+    QObject::connect(&add_car_, SIGNAL(clicked()), this, SLOT(showRootWindow()));
+
 }
 void UserWindow::freeScreenForFullScreen() {
     this->hide();
@@ -163,9 +188,7 @@ void UserWindow::returToLoginWindow() {
     buttons_container_.setFixedHeight(
         (this->height() * 0.4  + (this->height() / 20))
             * (cars_buttons_.size() + 1) / 2 - (this->height() / 20));
-//    buttons_container_.adjustSize();
     buttons_container_.setContentsMargins(0, 0, 0, 0);
-    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
     scroll_area_.update();
 
     user_id_ = 0;
@@ -177,7 +200,13 @@ void UserWindow::returToLoginWindow() {
     start_calendar_button_.setText("С: ");
     end_calendar_button_.setText("По: ");
     search_bar_->clear();
+    add_car_.hide();
     emit changeToLoginWindow();
+}
+
+void UserWindow::showUserAccount() {
+    this->hide();
+    emit changeToUserAccount(user_id_);
 }
 
 void UserWindow::StartCalendarVisibility() {
@@ -240,6 +269,7 @@ void UserWindow::MakeRequest() {
     delete grid_layout_;
     grid_layout_ = new QGridLayout();
     for (int i = 0, pos = 0; i < cars_buttons_.size(); ++i) {
+        std::cout << cars_buttons_[i].car_id << '\n';
         if (car_ids.find(cars_buttons_[i].car_id) != car_ids.end()) {
             addNewCarButton(cars_buttons_[i], (pos >> 1), (pos & 1));
             ++pos;
@@ -253,16 +283,26 @@ void UserWindow::MakeRequest() {
     buttons_container_.setFixedHeight(
         (this->height() * 0.4  + (this->height() / 20))
         * (car_ids.size() + 1) / 2 - (this->height() / 20));
-//    buttons_container_.adjustSize();
     buttons_container_.setContentsMargins(0, 0, 0, 0);
-    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
     scroll_area_.update();
 
 }
 
-void UserWindow::showWithUserID(uint64_t id) {
+void UserWindow::showWithUserID(uint64_t id, access access) {
     user_id_ = id;
     this->show();
+    switch (access) {
+        case access::USER: {
+            break;
+        }
+        case access::ROOT: {
+            add_car_.show();
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void UserWindow::Rent(uint64_t car_id, uint64_t price) {
@@ -279,5 +319,13 @@ void UserWindow::Rent(uint64_t car_id, uint64_t price) {
         msgBox.setText("ОШИБКА: на эту дату машина уже забронирована, пожалуйста, выберите другую.");
     }
     msgBox.exec();
+}
+
+void UserWindow::showRootWindow() {
+    this->hide();
+    emit changeToRootWindow();
+}
+void UserWindow::addCar(Car new_car) {
+    cars_buttons_.emplace_back(new_car);
 }
 
