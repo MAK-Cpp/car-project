@@ -58,7 +58,7 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     vertical_layout_->addWidget(&scroll_area_);
 
     search_container_.setLayout(horisontal_layout_);
-    search_container_.setContentsMargins(0, 0, 0, 0);
+    search_container_.setContentsMargins(this->width() / 30, 0, this->width() / 30, 0);
     search_container_.setFixedSize(this->width(), this->height() * 0.1);
     search_container_.setPalette(QPalette(QPalette::Window, Qt::black));
     search_container_.setAutoFillBackground(true);
@@ -106,15 +106,11 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
 
     horisontal_layout_->addWidget(&exit_);
     horisontal_layout_->addWidget(towns_);
-    horisontal_layout_->addWidget(search_bar_);
     horisontal_layout_->addWidget(&start_calendar_button_);
     horisontal_layout_->addWidget(&end_calendar_button_);
+    horisontal_layout_->addWidget(search_bar_);
     horisontal_layout_->addWidget(search_button_);
-    horisontal_layout_->setAlignment(&exit_, Qt::AlignLeft);
-    horisontal_layout_->setAlignment(towns_, Qt::AlignLeft);
-    horisontal_layout_->setAlignment(search_bar_, Qt::AlignLeft);
-    horisontal_layout_->setAlignment(&start_calendar_button_, Qt::AlignRight);
-    horisontal_layout_->setAlignment(&end_calendar_button_, Qt::AlignRight);
+    horisontal_layout_->setSpacing(this->width() / 40);
 
     scroll_area_.setFixedWidth(this->width());
     scroll_area_.setFixedHeight(this->height() - search_container_.height());
@@ -276,8 +272,6 @@ void UserWindow::Rent(uint64_t car_id, uint64_t price) {
         msgBox.exec();
         return;
     }
-    std::cout << "USER WITH ID " << user_id_ << " IS TRYING TO RENT CAR " << car_id << "\n";
-    std::cout << start_date_.daysTo(end_date_)  + 1 << '\n';
     bool is_done = GeneralDB::insert_sell(user_id_, car_id, start_date_, end_date_, price * (start_date_.daysTo(end_date_)  + 1));
     if (is_done) {
         msgBox.setText("Поздравляем, вы арендовали машину! Можете посмотреть свои машины в личном кабинете.");
