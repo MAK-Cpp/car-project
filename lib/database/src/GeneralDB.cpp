@@ -41,8 +41,8 @@ std::vector<Car> GeneralDB::getAllCars() {
         uint64_t car_id = sqlite3_column_int(stmt, 0);
         std::string name = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
         uint64_t price = sqlite3_column_int(stmt, 2);
-        uint64_t consumption = sqlite3_column_double(stmt, 3);
-        uint64_t capacity = sqlite3_column_double(stmt, 4);
+        double consumption = sqlite3_column_double(stmt, 3);
+        uint64_t capacity = sqlite3_column_int(stmt, 4);
         std::string fuel = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 5));
         std::string picture_path = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 6));
         std::string town = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 7));

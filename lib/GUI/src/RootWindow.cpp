@@ -50,6 +50,18 @@ RootWindow::RootWindow(QMainWindow *parent) : QWidget(parent) {
     vertical_layout->addWidget(add_button_);
     vertical_layout->addWidget(return_button_);
 
+    name_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    price_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    consumption_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    capacity_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    fuel_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    color_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    brand_line_edit_->setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    town_combo_box_->setStyleSheet("background-color: rgb(215, 192, 174); color: black;");
+    picture_path_button_->setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    add_button_->setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+    return_button_->setStyleSheet("color : black; background-color: rgb(215, 192, 174);");
+
     vertical_layout->setAlignment(Qt::AlignHCenter);
     this->setLayout(vertical_layout);
     this->adjustSize();
@@ -62,6 +74,9 @@ void RootWindow::searchPicture() {
     dialog.setViewMode(QFileDialog::Detail);
     dialog.setNameFilter(tr("Images (*.png)"));
     dialog.exec();
+    if (dialog.selectedFiles().size() == 0) {
+        return;
+    }
     std::filesystem::path file = dialog.selectedFiles()[0].toUtf8().data();
     if (file.parent_path() == PROJECT_SOURCE_DIR "/imgs") {
         QMessageBox msgBox;
@@ -75,7 +90,7 @@ void RootWindow::searchPicture() {
         msgBox.exec();
         return;
     }
-    picture_path_button_->setText(file.c_str());
+    picture_path_button_->setText(file.string().c_str());
 
 }
 
@@ -87,7 +102,6 @@ void RootWindow::addCar() {
         msgBox.exec();
         return;
     }
-    std::filesystem::copy_file(file, std::string{PROJECT_SOURCE_DIR} + "/imgs/" + file.filename().string());
     if (name_line_edit_->text().isEmpty() ||
         price_line_edit_->text().isEmpty() ||
         consumption_line_edit_->text().isEmpty() ||
@@ -107,15 +121,16 @@ void RootWindow::addCar() {
             0,
             name_line_edit_->text().toUtf8().data(),
             std::stoull(price_line_edit_->text().toUtf8().data()),
-            std::stoull(consumption_line_edit_->text().toUtf8().data()),
+            std::stod(consumption_line_edit_->text().toUtf8().data()),
             std::stoull(capacity_line_edit_->text().toUtf8().data()),
             fuel_line_edit_->text().toUtf8().data(),
-            file.filename().c_str(),
+            file.filename().string().c_str(),
             town_combo_box_->currentText().toUtf8().data(),
             color_line_edit_->text().toUtf8().data(),
             brand_line_edit_->text().toUtf8().data()
         );
         new_car.car_id = GeneralDB::insert_car(new_car);
+        std::filesystem::copy_file(file, std::string{PROJECT_SOURCE_DIR} + "/imgs/" + file.filename().string());
         emit addCarToUserWindow(new_car);
         name_line_edit_->clear();
         price_line_edit_->clear();

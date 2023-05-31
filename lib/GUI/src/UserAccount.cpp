@@ -10,14 +10,13 @@ UserAccount::UserAccount(QMainWindow *parent): QWidget(parent) {
     return_button_->setFixedWidth(this->width());
     return_button_->setFixedHeight(this->height() * 0.1);
     return_button_->move(0, this->height() - return_button_->height());
+    return_button_->setStyleSheet("background-color : rgb(215, 192, 174);");
 
     QObject::connect(return_button_, SIGNAL(clicked()), this, SLOT(hideUserAccount()));
 
 }
 void UserAccount::showUserAccount(uint64_t user_id) {
-    std::cout << user_id << " is in his account!\n";
     auto user_cars = GeneralDB::get_rented_car(user_id);
-    std::cout << user_cars.size() << '\n';
     user_story_table_ = new QTableWidget(user_cars.size() + 1, 4, this);
     user_story_table_->setItem(0, 0, new QTableWidgetItem("Машина"));
     user_story_table_->setItem(0, 1, new QTableWidgetItem("Начало брони"));
@@ -26,7 +25,7 @@ void UserAccount::showUserAccount(uint64_t user_id) {
     user_story_table_->setColumnWidth(0, this->width() / 4);
     user_story_table_->setColumnWidth(1, this->width() / 4);
     user_story_table_->setColumnWidth(2, this->width() / 4);
-    user_story_table_->setColumnWidth(3, this->width() / 4);
+    user_story_table_->setColumnWidth(3, this->width() * 0.24);
 
     for (std::size_t i = 0; i < user_cars.size(); ++i) {
         user_story_table_->setItem(i + 1, 0, new QTableWidgetItem(std::get<0>(user_cars[i]).c_str()));
@@ -46,7 +45,6 @@ void UserAccount::showUserAccount(uint64_t user_id) {
 
     user_story_table_->setFixedWidth(this->width());
     user_story_table_->setFixedHeight(this->height() * 0.9);
-
 
     this->show();
 }

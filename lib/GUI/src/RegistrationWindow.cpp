@@ -60,6 +60,14 @@ RegistrationWindow::RegistrationWindow(QMainWindow *parent)
     register_button_.setFixedWidth(this->width() / 3);
     success_button_.setFixedWidth(this->width() / 3);
 
+    login_button_.setStyleSheet("background-color : rgb(215, 192, 174);");
+    register_button_.setStyleSheet("background-color : rgb(215, 192, 174);");
+    success_button_.setStyleSheet("background-color : rgb(215, 192, 174);");
+    user_name_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    login_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    password_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    again_password_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+
     password_input_.setEchoMode(QLineEdit::Password);
     again_password_input_.setEchoMode(QLineEdit::Password);
 

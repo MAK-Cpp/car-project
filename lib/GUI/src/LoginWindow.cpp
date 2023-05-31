@@ -27,11 +27,19 @@ LoginWindow::LoginWindow(QMainWindow *parent)
     form_layout_.addRow(&password_label_, &password_input_);
     form_layout_.setFormAlignment(Qt::AlignCenter | Qt::AlignTop);
 
+    login_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    password_input_.setStyleSheet("background-color : rgb(238, 227, 203); color : black; border : none;");
+    name_label_.setStyleSheet("color : black;");
+    login_button_.setStyleSheet("background-color : rgb(215, 192, 174);");
+    register_button_.setStyleSheet("background-color : rgb(215, 192, 174);");
+
+
     vertical_box_layout_.addWidget(&name_label_);
     vertical_box_layout_.addStretch(1);
     vertical_box_layout_.addWidget(&error_label_);
     vertical_box_layout_.addLayout(&form_layout_);
     vertical_box_layout_.addWidget(&login_button_);
+
     vertical_box_layout_.addWidget(&register_button_);
     vertical_box_layout_.addStretch(2);
 
