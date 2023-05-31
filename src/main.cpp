@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     RegistrationWindow registration_window(&main_window);
     UserWindow user_window(&main_window, GeneralDB::getAllCars());
 
-    QObject::connect(&login_window, SIGNAL(changeToUserWindow()), &user_window, SLOT(show()));
+    QObject::connect(&login_window, SIGNAL(changeToUserWindow(uint64_t)), &user_window, SLOT(showWithUserID(uint64_t)));
     QObject::connect(&login_window, SIGNAL(changeToRegistrationWindow()), &registration_window, SLOT(show()));
 
     QObject::connect(&registration_window, SIGNAL(changeToLoginWindow()), &login_window, SLOT(show()));

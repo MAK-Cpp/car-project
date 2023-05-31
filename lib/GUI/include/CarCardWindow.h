@@ -38,6 +38,7 @@ public slots:
 signals:
     void showFullScreen();
     void hideFullScreen();
+    void makeRent();
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_CARCARDWINDOW_H_

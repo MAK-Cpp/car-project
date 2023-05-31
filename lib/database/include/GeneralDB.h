@@ -11,10 +11,10 @@
 enum class access : uint8_t { NONE, USER, ROOT };
 enum class reg_const : bool { NONE, COMPLETE };
 
-const std::map<std::string, double> price_coefficient {{"Минск" , 0.037},
-                                                       {"Москва", 1.},
-                                                       {"Санкт-Петербург", 1.},
-                                                       {"Вашингтон", 0.012}};
+const std::map<std::string, std::pair<double, std::string>> price_coefficient {{"Минск" , {0.037, "Бел. руб."}},
+                                                       {"Москва", {1., "Руб."}},
+                                                       {"Санкт-Петербург", {1., "Руб."}},
+                                                       {"Вашингтон", {0.012, "Долл."}}};
 
 class GeneralDB {
 private:

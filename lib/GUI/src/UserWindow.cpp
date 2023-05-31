@@ -7,11 +7,11 @@ void UserWindow::addNewCarButton(const Car &car, int i, int j) {
     CarCardWindow *another_car = new CarCardWindow(this, car);
     QObject::connect(another_car, SIGNAL(showFullScreen()), this, SLOT(freeScreenForFullScreen()));
     QObject::connect(another_car, SIGNAL(hideFullScreen()), this, SLOT(returScreenFromFullScreen()));
-    cars_buttons_.emplace_back(this, car);
+    QObject::connect(another_car, SIGNAL(makeRent()), this, )
     grid_layout_->addWidget(another_car, i, j);
 }
 
-UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
+UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     : QWidget(parent),
       scroll_area_(this),
       buttons_container_(&scroll_area_),
@@ -19,7 +19,8 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
       end_calendar_widget_(this),
       exit_("Выйти"),
       start_calendar_button_("С: "),
-      end_calendar_button_("По: ") {
+      end_calendar_button_("По: "),
+      cars_buttons_(cars){
 
     start_calendar_button_.setStyleSheet("color : white; background-color: gray;");
     end_calendar_button_.setStyleSheet("color : white; background-color: gray;");
@@ -103,12 +104,14 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &cars)
     scroll_area_.setFixedHeight(this->height() - search_container_.height());
     buttons_container_.setFixedWidth(this->width());
 
-    for (int i = 0; i < cars.size(); ++i) {
-        addNewCarButton(cars[i], (i >> 1), (i & 1));
+    for (int i = 0; i < cars_buttons_.size(); ++i) {
+        addNewCarButton(cars_buttons_[i], (i >> 1), (i & 1));
     }
+
     grid_layout_->setVerticalSpacing(this->height() / 20);
 
     buttons_container_.setLayout(grid_layout_);
+    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
 
     scroll_area_.setWidget(&buttons_container_);
     scroll_area_.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -132,6 +135,7 @@ void UserWindow::returScreenFromFullScreen() {
 }
 void UserWindow::returToLoginWindow() {
     this->hide();
+    user_id_ = 0;
     start_calendar_widget_.hide();
     end_calendar_widget_.hide();
     start_date_ = std::move(*new QDate());
@@ -210,7 +214,6 @@ void UserWindow::MakeRequest() {
         msgBox.exec();
         return;
     }
-    std::cout << "pohui poidet\n";
     std::set<uint64_t>
         car_ids = GeneralDB::select_cars(search_bar_->text(), start_date_, end_date_, towns_->currentText());
 
@@ -218,19 +221,28 @@ void UserWindow::MakeRequest() {
     delete grid_layout_;
     grid_layout_ = new QGridLayout();
     for (int i = 0, pos = 0; i < cars_buttons_.size(); ++i) {
-        if (car_ids.find(cars_buttons_[i].second.car_id) != car_ids.end()) {
-            grid_layout_->addWidget(new CarCardWindow(cars_buttons_[i].first, cars_buttons_[i].second),
-                                    (pos >> 1),
-                                    (pos & 1));
+        if (car_ids.find(cars_buttons_[i].car_id) != car_ids.end()) {
+            addNewCarButton(cars_buttons_[i], (pos >> 1), (pos & 1));
             ++pos;
         }
     }
+    grid_layout_->setContentsMargins(0, 0, 0, 0);
+    grid_layout_->setSpacing(0);
+    grid_layout_->setVerticalSpacing(this->height() / 20);
     buttons_container_.setLayout(grid_layout_);
     grid_layout_->update();
     buttons_container_.setFixedHeight(
-        this->height() * 0.4 * (car_ids.size() + 1) / 2
-        + (this->height() / 20) * ((car_ids.size() + 1) / 2));
+        (this->height() * 0.4  + (this->height() / 20))
+        * (car_ids.size() + 1) / 2 - (this->height() / 20));
+//    buttons_container_.adjustSize();
+    buttons_container_.setContentsMargins(0, 0, 0, 0);
+    buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
     scroll_area_.update();
 
+}
+
+void UserWindow::showWithUserID(uint64_t id) {
+    user_id_ = id;
+    this->show();
 }
 

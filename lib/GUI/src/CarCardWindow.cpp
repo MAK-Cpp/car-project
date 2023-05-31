@@ -39,7 +39,7 @@ CarCardWindow::CarCardWindow(const QWidget *parent, const Car &car)
         "\nРасход топлива: " + std::to_string(car.consumption) +
         "\nВместимость: " + std::to_string(car.capacity) +
         "\nТопливо: " + car.fuel +
-        "\nЦена: " + std::to_string(car.price)).c_str());
+        "\nЦена (за 1 день): " + std::to_string(static_cast<int>(car.price * price_coefficient.at(car.town).first)) + " " + price_coefficient.at(car.town).second).c_str());
     full_description_->setStyleSheet("background-color: rgba(0, 0, 0, 0.8); color: rgba(255, 255, 255, 1.0);");
     full_description_->setFont(QFont(full_description_->font().family(), 30));
     grid_layout_.addWidget(full_description_);
@@ -116,6 +116,7 @@ CarCardWindow::CarCardWindow(const CarCardWindow &other)
 
     QObject::connect(&rent_button_, SIGNAL(clicked()), this, SLOT(openFullScreen()));
     QObject::connect(&close_full_screen_, SIGNAL(clicked()), this, SLOT(closeFullScreen()));
+    QObject::connect(full_rent_button, SIGNAL(clicked()), this, SIGNAL(makeRent()));
 }
 
 CarCardWindow& CarCardWindow::operator=(const CarCardWindow& other) {

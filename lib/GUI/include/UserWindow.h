@@ -10,11 +10,12 @@
 class UserWindow : public QWidget {
 Q_OBJECT
 public:
-    explicit UserWindow(QMainWindow *parent, const std::vector<Car> &cars);
+    explicit UserWindow(QMainWindow *parent, const std::vector<Car> &&cars);
     void mousePressEvent ( QMouseEvent * event ) override;
 protected:
     void addNewCarButton(const Car& car, int i, int j);
 private:
+    uint64_t user_id_;
     QCalendarWidget start_calendar_widget_;
     QCalendarWidget end_calendar_widget_;
     QComboBox *towns_;
@@ -31,7 +32,7 @@ private:
     QPushButton start_calendar_button_;
     QPushButton end_calendar_button_;
     inline static QString date_format_ = "dd.MM.yyyy";
-    std::vector <std::pair<const QWidget*, const Car>> cars_buttons_;
+    std::vector <Car> cars_buttons_;
 public slots:
     void freeScreenForFullScreen();
     void returScreenFromFullScreen();
@@ -41,6 +42,8 @@ public slots:
     void SetStartData(QDate);
     void SetEndData(QDate);
     void MakeRequest();
+    void showWithUserID(uint64_t);
+    void Rent();
 signals:
     void changeToLoginWindow();
 };
