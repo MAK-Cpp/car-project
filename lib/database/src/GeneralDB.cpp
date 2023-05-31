@@ -72,22 +72,23 @@ std::vector<Car> GeneralDB::getAllCars() {
  * @return access::USER, если вошел обычный пользователь
  * @return access::ROOT, если зашел администратор
  */
-access GeneralDB::check_user(QString login_s, QString password_s) {
+std::pair<int, access> GeneralDB::check_user(QString login_s, QString password_s) {
     sqlite3_stmt *stmt;
-    std::string query = "SELECT login, password, root FROM users";
+    std::string query = "SELECT login, password, root, id FROM users";
     sqlite3_prepare_v2(data_base_, query.c_str(), -1, &stmt, nullptr);
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         std::string login = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0));
         std::string password = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1));
         int root = sqlite3_column_int(stmt, 2);
+        int user_id = sqlite3_column_int(stmt, 3);
         if (QString::fromStdString(login) == login_s && QString::fromStdString(password) == password_s) {
             if (root == 1) {
-                return access::USER;
+                return {user_id, access::USER};
             }
-            return access::ROOT;
+            return {user_id, access::ROOT};
         }
     }
-    return access::NONE;
+    return {-1, access::NONE};
 }
 
 /**
@@ -161,9 +162,22 @@ std::set<uint64_t> GeneralDB::select_cars(QString line_s, QDate users_start_date
 }
 
 bool GeneralDB::insert_sell(QString user_id_s, QString car_id_s, QDate start_date_s, QDate end_date_s, int total_sum_s){
+    sqlite3_stmt *stmt2;
+    std::string one_query = "SELECT start_date, end_date FROM sells WHERE car_id = " + toStdString(car_id_s);
+    sqlite3_prepare_v2(data_base_, one_query.c_str(), -1, &stmt2, nullptr);
+    while (sqlite3_step(stmt2) == SQLITE_ROW) {
+        QDate start_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 0)), "dd-MM-yyyy");
+        QDate end_date = QDate::fromString(reinterpret_cast<const char *>(sqlite3_column_text(stmt2, 1)), "dd-MM-yyyy");
+        if (end_date < start_date_s || end_date_s < start_date) {
+            continue;
+        } else {
+            return false;
+        }
+    }
     char *zErrMsg;
     sqlite3_stmt *stmt;
     int rc;
+
     std::string query = "INSERT INTO sells (user_id, car_id, start_date, end_date, ) VALUES ('" + toStdString(user_id_s) + "', '"
             + toStdString(car_id_s) +
             "', '" + toStdString(start_date_s.toString("dd-MM-yyyy")) + "', '" + toStdString(end_date_s.toString("dd-MM-yyyy")) + "', "

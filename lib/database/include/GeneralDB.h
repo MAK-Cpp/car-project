@@ -29,7 +29,7 @@ public:
 
     static reg_const register_user(QString name_s, QString login_s, QString password_s);
 
-    static access check_user(QString login_s, QString password_s);
+    static std::pair<int, access> check_user(QString login_s, QString password_s);
 
     static std::set<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s);
 
