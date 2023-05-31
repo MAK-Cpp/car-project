@@ -43,7 +43,7 @@ public slots:
     void SetEndData(QDate);
     void MakeRequest();
     void showWithUserID(uint64_t);
-    void Rent();
+    void Rent(uint64_t, uint64_t);
 signals:
     void changeToLoginWindow();
 };

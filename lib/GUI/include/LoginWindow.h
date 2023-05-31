@@ -14,7 +14,7 @@ public slots:
     void showUserWindow();
     void showRegistrationWindow();
 signals:
-    void changeToUserWindow();
+    void changeToUserWindow(uint64_t);
     void changeToRegistrationWindow();
 private:
     QVBoxLayout vertical_box_layout_;

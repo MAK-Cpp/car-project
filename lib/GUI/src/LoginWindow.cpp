@@ -62,7 +62,8 @@ void LoginWindow::showUserWindow() {
         password_input_.clear();
         return;
     }
-    switch (GeneralDB::check_user(login_input_.text(), password_input_.text())) {
+    std::pair<int, access> reg = GeneralDB::check_user(login_input_.text(), password_input_.text());
+    switch (reg.second) {
         case access::NONE: {
             error_label_.setText("Ошибка: неправильный логин или пароль!");
             break;
@@ -71,7 +72,7 @@ void LoginWindow::showUserWindow() {
             error_label_.clear();
             this->hide();
             login_input_.clear();
-            emit changeToUserWindow();
+            emit changeToUserWindow(reg.first);
             break;
         }
         case access::ROOT: {
