@@ -72,11 +72,14 @@ void LoginWindow::showUserWindow() {
             error_label_.clear();
             this->hide();
             login_input_.clear();
-            emit changeToUserWindow(reg.first);
+            emit changeToUserWindow(reg.first, access::USER);
             break;
         }
         case access::ROOT: {
-            error_label_.setText("Извините, рут пока заходить не может.");
+            error_label_.clear();
+            this->hide();
+            login_input_.clear();
+            emit changeToUserWindow(reg.first, access::ROOT);
             break;
         }
         default: {

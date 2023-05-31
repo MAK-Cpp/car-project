@@ -4,6 +4,7 @@
 #include "QT-config.h"
 #include "CarCardWindow.h"
 #include "UserAccount.h"
+#include "RootWindow.h"
 #include <vector>
 #include <QVector>
 
@@ -32,6 +33,7 @@ private:
     QPushButton exit_;
     QPushButton start_calendar_button_;
     QPushButton end_calendar_button_;
+    QPushButton add_car_;
     inline static QString date_format_ = "dd.MM.yyyy";
     std::vector <Car> cars_buttons_;
 public slots:
@@ -44,11 +46,14 @@ public slots:
     void SetStartData(QDate);
     void SetEndData(QDate);
     void MakeRequest();
-    void showWithUserID(uint64_t);
+    void showWithUserID(uint64_t, access);
     void Rent(uint64_t, uint64_t);
+    void showRootWindow();
+    void addCar(Car);
 signals:
     void changeToLoginWindow();
     void changeToUserAccount(uint64_t);
+    void changeToRootWindow();
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_USERWINDOW_H_

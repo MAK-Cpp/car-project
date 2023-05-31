@@ -33,11 +33,11 @@ public:
 
     static std::set<uint64_t> select_cars(QString line_s, QDate users_start_date, QDate users_end_date, QString town_s);
 
-    static bool insert_car(Car const &new_car);
+    static uint64_t insert_car(Car const &new_car);
 
     static bool insert_sell(uint64_t user_id_s, uint64_t car_id_s, QDate start_date_s, QDate end_date_s, uint64_t total_sum_s);
 
-    static std::vector<std::tuple<uint64_t, QDate, QDate, uint64_t>> get_rented_car(uint64_t user_id);
+    static std::vector<std::tuple<std::string, QDate, QDate, uint64_t, std::string>> get_rented_car(uint64_t user_id);
 };
 
 #endif //CAR_PROJECT_GENERALDB_H
