@@ -3,6 +3,7 @@
 
 #include "QT-config.h"
 #include "CarCardWindow.h"
+#include "UserAccount.h"
 #include <vector>
 #include <QVector>
 
@@ -37,6 +38,7 @@ public slots:
     void freeScreenForFullScreen();
     void returScreenFromFullScreen();
     void returToLoginWindow();
+    void showUserAccount();
     void StartCalendarVisibility();
     void EndCalendarVisibility();
     void SetStartData(QDate);
@@ -46,6 +48,7 @@ public slots:
     void Rent(uint64_t, uint64_t);
 signals:
     void changeToLoginWindow();
+    void changeToUserAccount(uint64_t);
 };
 
 #endif //CARPROJECT_LIB_GUI_INCLUDE_USERWINDOW_H_

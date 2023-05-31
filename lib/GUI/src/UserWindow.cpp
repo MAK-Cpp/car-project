@@ -38,6 +38,8 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
       end_calendar_button_("По: "),
       cars_buttons_(cars){
 
+
+
     start_calendar_button_.setStyleSheet("color : white; background-color: gray;");
     end_calendar_button_.setStyleSheet("color : white; background-color: gray;");
 
@@ -136,6 +138,15 @@ UserWindow::UserWindow(QMainWindow *parent, const std::vector<Car> &&cars)
     start_calendar_widget_.move((this->width() - start_calendar_widget_.width()) / 2, search_container_.height());
     end_calendar_widget_.raise();
     end_calendar_widget_.move((this->width() - end_calendar_widget_.width()) / 2, search_container_.height());
+
+
+    QPushButton* user_account_button = new QPushButton(this);
+    user_account_button->setFixedSize(this->height() / 11, this->height() / 11);
+    user_account_button->move(this->width() - user_account_button->width(), this->height() - user_account_button->height());
+    user_account_button->setStyleSheet("background-color: rgba(220, 20, 60, 1.0); border: none;");
+    user_account_button->setMask(QRegion(QRect(0, 0, this->height() / 11, this->height() / 11), QRegion::Ellipse));
+    user_account_button->raise();
+    QObject::connect(user_account_button, SIGNAL(clicked()), this, SLOT(showUserAccount()));
 }
 void UserWindow::freeScreenForFullScreen() {
     this->hide();
@@ -163,7 +174,6 @@ void UserWindow::returToLoginWindow() {
     buttons_container_.setFixedHeight(
         (this->height() * 0.4  + (this->height() / 20))
             * (cars_buttons_.size() + 1) / 2 - (this->height() / 20));
-//    buttons_container_.adjustSize();
     buttons_container_.setContentsMargins(0, 0, 0, 0);
     buttons_container_.setStyleSheet("border-style: solid; border-width: 3px; border-color: pink;");
     scroll_area_.update();
@@ -178,6 +188,11 @@ void UserWindow::returToLoginWindow() {
     end_calendar_button_.setText("По: ");
     search_bar_->clear();
     emit changeToLoginWindow();
+}
+
+void UserWindow::showUserAccount() {
+    this->hide();
+    emit changeToUserAccount(user_id_);
 }
 
 void UserWindow::StartCalendarVisibility() {
@@ -280,4 +295,3 @@ void UserWindow::Rent(uint64_t car_id, uint64_t price) {
     }
     msgBox.exec();
 }
-

@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
     LoginWindow login_window(&main_window);
     RegistrationWindow registration_window(&main_window);
     UserWindow user_window(&main_window, GeneralDB::getAllCars());
+    UserAccount user_account(&main_window);
 
     QObject::connect(&login_window, SIGNAL(changeToUserWindow(uint64_t)), &user_window, SLOT(showWithUserID(uint64_t)));
     QObject::connect(&login_window, SIGNAL(changeToRegistrationWindow()), &registration_window, SLOT(show()));
@@ -43,10 +44,13 @@ int main(int argc, char *argv[]) {
     QObject::connect(&registration_window, SIGNAL(changeToLoginWindow()), &login_window, SLOT(show()));
 
     QObject::connect(&user_window, SIGNAL(changeToLoginWindow()), &login_window, SLOT(show()));
+    QObject::connect(&user_window, SIGNAL(changeToUserAccount(uint64_t)), &user_account, SLOT(showUserAccount(uint64_t)));
 
     user_window.hide();
     registration_window.hide();
     main_window.show();
+//    main_window.showFullScreen();
+
 
 
     return app.exec();
